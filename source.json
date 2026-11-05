@@ -1,44 +1,22 @@
 {
-  "name": "Alejandro's App Source",
-  "subtitle": "Aplicaciones para Feather",
-  "description": "Fuente personal de aplicaciones para instalar con Feather.",
+  "name": "Apps de EL ALE :)",
+  "subtitle": "Una selección personal de juegos y emulación para iPad.",
+  "description": "Bienvenido a Apps de EL ALE :), un catálogo personal y cuidado de aplicaciones para iPad. Aquí encontrarás proyectos oficiales de emulación, con información en español y enlaces a sus versiones verificadas. Usa únicamente copias de juegos y archivos de sistema cuyo uso tengas legalmente permitido.",
+  "iconURL": "https://raw.githubusercontent.com/t2wmt6sgff-glitch/Alejandro_App_Source/main/assets/source-icon.jpg",
+  "tintColor": "#31563B",
+  "featuredApps": [
+    "org.ppsspp.ppsspp"
+  ],
   "apps": [
-    {
-      "name": "Delta",
-      "bundleIdentifier": "com.rileytestut.Delta",
-      "developerName": "Riley Testut",
-      "category": "games",
-      "localizedDescription": "Emulador para iPad de consolas Nintendo clásicas, incluidas NES, SNES, Nintendo 64, Game Boy, Game Boy Color, Game Boy Advance y Nintendo DS. Ofrece controles táctiles y para mandos, partidas guardadas y sincronización en la nube. No incluye juegos; importa únicamente copias cuyo uso tengas derecho a realizar.",
-      "iconURL": "https://cdn.altstore.io/file/altstore/images/delta/Delta4.png",
-      "appPermissions": {
-        "entitlements": [
-          "get-task-allow"
-        ],
-        "privacy": {
-          "NSLocalNetworkUsageDescription": "Delta uses the local network to communicate with AltServer and enable JIT.",
-          "NSMicrophoneUsageDescription": "Delta uses your microphone to emulate the Nintendo DS microphone.",
-          "NSPhotoLibraryAddUsageDescription": "Please allow Delta to save screenshots to your Photo Library.",
-          "NSPhotoLibraryUsageDescription": "Press “OK” to allow Delta to use images from your Photo Library as game artwork."
-        }
-      },
-      "versions": [
-        {
-          "version": "1.7.1",
-          "buildVersion": "139",
-          "date": "2025-04-08",
-          "downloadURL": "https://cdn.altstore.io/file/altstore/apps/delta/1_7_1.ipa",
-          "size": 196023694,
-          "minOSVersion": "14.0"
-        }
-      ]
-    },
     {
       "name": "PPSSPP",
       "bundleIdentifier": "org.ppsspp.ppsspp",
-      "developerName": "Henrik Rydgård and contributors",
-      "category": "games",
-      "localizedDescription": "Emulador de PlayStation Portable (PSP) para iPad, desarrollado por Henrik Rydgård y colaboradores. Permite cargar copias de juegos, configurar controles táctiles o mandos y ajustar gráficos y rendimiento. No requiere BIOS. No incluye juegos; utiliza únicamente copias cuyo uso tengas derecho a realizar.",
+      "developerName": "Henrik Rydgård y colaboradores",
+      "subtitle": "Juega a tus copias de PSP con controles y gráficos configurables.",
+      "localizedDescription": "Emulador de PlayStation Portable para iPad. Permite ajustar opciones gráficas y de rendimiento, personalizar los controles táctiles y utilizar mandos compatibles. No requiere BIOS ni incluye juegos: importa únicamente copias de juegos que hayas obtenido legalmente.",
       "iconURL": "https://raw.githubusercontent.com/hrydgard/ppsspp/v1.20.4/icons/hicolor/512x512/apps/ppsspp.png",
+      "tintColor": "#31563B",
+      "category": "games",
       "appPermissions": {
         "entitlements": [],
         "privacy": {

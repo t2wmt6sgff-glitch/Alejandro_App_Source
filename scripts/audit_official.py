@@ -8,10 +8,7 @@ import zipfile
 from pathlib import Path, PurePosixPath
 
 APPS = [
-    ("Delta", "https://cdn.altstore.io/file/altstore/apps/delta/1_7_1.ipa"),
-    ("Manic EMU", "https://github.com/Manic-EMU/ManicEMU/releases/download/v2.0.2/ManicEMU.v2.0.2.SideloadJIT.ipa"),
     ("PPSSPP", "https://github.com/hrydgard/ppsspp/releases/download/v1.20.4/PPSSPP-iOS-v1.20.4.ipa"),
-    ("Gen1Recomp", "https://github.com/bryanthaboi/gen1recomp/releases/download/v0.4.0/gen1recomp%2B%2B-0.4.0-ios.ipa"),
 ]
 IGNORED = {"application-identifier", "com.apple.developer.team-identifier"}
 
@@ -27,6 +24,9 @@ def inspect(name, url, temp):
         raise ValueError("descarga redirigida a un dominio inesperado")
     digest = hashlib.sha256(ipa.read_bytes()).hexdigest()
     with zipfile.ZipFile(ipa) as archive:
+        damaged_member = archive.testzip()
+        if damaged_member is not None:
+            raise ValueError(f"archivo IPA dañado: fallo CRC en {damaged_member}")
         names = archive.namelist()
         main = [p for p in names if p.startswith("Payload/") and p.endswith(".app/Info.plist") and p.count("/") == 2]
         if len(main) != 1:

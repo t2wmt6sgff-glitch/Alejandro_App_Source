@@ -1,7 +1,6 @@
 import datetime
 import os
 import json
-import os
 import plistlib
 import re
 import subprocess
@@ -42,6 +41,9 @@ def signed_entitlements(bundle_path):
 
 def inspect_ipa(ipa_path, extraction_root):
     with zipfile.ZipFile(ipa_path) as archive:
+        damaged_member = archive.testzip()
+        if damaged_member is not None:
+            fail(f"El IPA está dañado (fallo de integridad en {damaged_member}); catálogo sin cambios.")
         names = archive.namelist()
         main_infos = [
             path for path in names

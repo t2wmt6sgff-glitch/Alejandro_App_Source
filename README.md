@@ -1,61 +1,58 @@
-# Fuente personal de AltStore Classic para Feather
+# Apps de EL ALE :)
 
-Añade esta fuente en Feather:
+Catálogo personal en español para Feather, con aplicaciones verificadas y enlaces a sus publicaciones oficiales.
 
+**Añade la fuente a Feather:**
 https://raw.githubusercontent.com/t2wmt6sgff-glitch/Alejandro_App_Source/main/source.json
 
-## Aplicaciones publicadas
+## Aplicación disponible
 
-| Aplicación | Versión | Bundle ID | Descripción publicada |
-|---|---:|---|---|
-| Delta | 1.7.1 (139) | `com.rileytestut.Delta` | Emulador para iPad de NES, SNES, Nintendo 64, Game Boy, Game Boy Color, Game Boy Advance y Nintendo DS. Ofrece controles táctiles y para mandos, partidas guardadas y sincronización en la nube. No incluye juegos. |
-| PPSSPP | 1.20.4 | `org.ppsspp.ppsspp` | Emulador de PlayStation Portable para iPad. Permite cargar copias de juegos, configurar controles y mandos y ajustar gráficos y rendimiento. No requiere BIOS y no incluye juegos. |
+| Aplicación | Versión | Para qué sirve |
+|---|---:|---|
+| [PPSSPP](https://github.com/hrydgard/ppsspp) | 1.20.4 | Emulador de PlayStation Portable con ajustes gráficos y controles configurables. No necesita BIOS ni incluye juegos. |
 
-IPA oficial descargado y analizado en macOS para ambas apps; firma, permisos, mínimo de iOS y familia iPad verificados. Las descripciones completas en español y los avisos para usar únicamente copias que tengas derecho a utilizar aparecen en la fuente.
+El IPA de PPSSPP procede del release oficial v1.20.4. Se comprobaron el Bundle ID, la versión, el número de compilación, el requisito mínimo de iOS, el soporte declarado para iPad, el tamaño, la integridad ZIP, los entitlements firmados y las claves de privacidad. La última versión oficial consultada sigue siendo 1.20.4. No se ha probado su ejecución en un iPad con iPadOS 26.
 
-Las dos descargas apuntan directamente a los proveedores oficiales ([Delta en la fuente de AltStore](https://apps.altstore.io/) y [PPSSPP en su release](https://github.com/hrydgard/ppsspp/releases/tag/v1.20.4)); este repositorio no vuelve a alojar sus IPA. Las versiones, IDs y permisos de `source.json` salen del archivo IPA. Las claves de privacidad se conservan en el idioma que usa el IPA. El análisis no prueba que la app se ejecute en iPadOS 26 ni que cada juego funcione.
+La descripción completa y los permisos técnicos se muestran en la fuente. El catálogo enlaza directamente al IPA oficial; este repositorio no vuelve a alojarlo. Utiliza únicamente copias de juegos obtenidas legalmente.
 
-## Candidatas comprobadas y no publicadas
+## Sobre otras aplicaciones investigadas
 
-| Candidata | Resultado | Motivo |
-|---|---|---|
-| Manic EMU 2.0.2 (build 5) | IPA oficial válido, firmado, versión iPad; análisis de permisos completo. | Declara entitlements de kernel, ejecución sostenida, notificaciones y contenedores iCloud. No se ha verificado que la firma habitual que se usa en Feather pueda satisfacerlos, así que no la publico como instalación normal. |
-| Gen1Recomp 0.4.0 (build 400) | IPA oficial válido, firmado, versión iPad; análisis de permisos completo. | Declara HealthKit, cuya capacidad de firma no está verificada para Feather. Además, la licencia oficial impone condiciones específicas al launcher incluido y exige atribución. El proyecto requiere que aportes tu propia ROM; no incluye ROM. |
+**Manic EMU 2.0.2** tiene un IPA oficial, pero no está publicado aquí como instalable. El IPA declara App Groups, contenedores y servicios iCloud, además de capacidades de ejecución y kernel. El proyecto indica que App Groups e iCloud deben configurarse para la cuenta que construye la aplicación o quitarse antes de compilarla. Una firma normal de Feather no puede garantizar esos identificadores y servicios. No se deben borrar capacidades del IPA sin verificar el resultado. La alternativa legítima es usar la distribución oficial o disponer de la cuenta de desarrollador y las capacidades correspondientes; no se ha verificado una instalación con Feather.
 
-Ambas candidatas tienen IPA verificables, pero eso por sí solo no confirma que se puedan instalar sin capacidades especiales. No incluí una aplicación hasta resolver ese punto. No redistribuimos sus IPA.
+**Gen1Recomp 0.4.0** también publica un IPA oficial para iOS, pero no está publicado aquí como instalable. El IPA verificado declara HealthKit. El proyecto utiliza esa capacidad para contar pasos en iOS; una firma personal puede no autorizarla y no se ha comprobado en Feather qué ocurre al volver a firmar. No se ha alterado el IPA ni se ha retirado la capacidad. El uso requiere que cada persona aporte su propio archivo de juego legal; este repositorio no contiene ROMs. La publicación oficial tiene condiciones de licencia adicionales para su launcher, por lo que esta fuente enlaza —y no vuelve a distribuir— el archivo oficial.
+
+La presencia de un IPA en un release no prueba por sí sola que Feather pueda instalarlo. No se ha realizado una instalación en un dispositivo para estas candidatas.
 
 ## Añadir o actualizar una aplicación desde GitHub
 
-Necesitas tener permiso para publicar el IPA:
+Este proceso utiliza un Release de GitHub. El archivo IPA se guarda como activo del Release, no en el historial normal de archivos.
 
-1. Abre este repositorio en GitHub y pulsa **Releases → Draft a new release**.
-2. Crea una etiqueta nueva y única, por ejemplo `mi-app-1.2`. Para un cambio de descripción o una nueva versión de la misma app, la etiqueta debe ser nueva.
-3. En el título del Release escribe el nombre que quieres que aparezca en Feather.
-4. En el texto del Release escribe la descripción en español.
-5. Arrastra un único archivo `.ipa` al apartado de archivos adjuntos. No incluyas certificados, perfiles de aprovisionamiento ni contraseñas.
-6. Pulsa **Publish release**. GitHub Actions descargará el IPA en un runner macOS, analizará la app y todas sus extensiones, y validará firma, Bundle ID, versión, build, versión mínima, soporte iPad, privacidad, icono y tamaño.
-7. Si todas las comprobaciones pasan, Actions actualiza `source.json` y el icono. Si falla algo, el catálogo no se actualiza; abre la ejecución fallida en **Actions** para leer el error en español.
+1. Abre **Releases** en este repositorio y pulsa **Draft a new release**.
+2. Crea una etiqueta nueva y única. Para una actualización o un cambio de descripción usa otra etiqueta, por ejemplo 'mi-app-1.2'.
+3. Escribe en el título el nombre que quieres mostrar en Feather.
+4. Escribe la descripción en español en el texto del Release.
+5. Adjunta un único archivo .ipa y pulsa **Publish release**.
+6. GitHub Actions comprobará el archivo automáticamente. Si todo pasa, añadirá la app o actualizará la entrada que tenga el mismo Bundle ID. Si algo falla, no se cambia el catálogo; abre **Actions** y consulta el resumen del error.
 
-El Bundle ID del IPA identifica la entrada. Publicar otra versión con el mismo Bundle ID la actualiza y conserva ese identificador. Un Bundle ID ya existente no crea una entrada duplicada. Si el primer procesamiento falla, corrige el Release y vuelve a ejecutarlo desde **Actions → Add or update app from a release → Run workflow**, indicando la etiqueta ya publicada.
+No incluyas certificados, perfiles de aprovisionamiento, contraseñas ni ROMs. Publica únicamente archivos cuya distribución esté autorizada. El nombre y la descripción que escribas en el Release serán los que aparezcan en la fuente; para cambiar solo esos textos sin volver a subir el IPA, abre **Actions → Edit app name and description → Run workflow** y rellena el formulario.
 
-Los IPA añadidos de esta forma se guardan como activos del Release, no dentro del historial Git. Las aplicaciones de terceros incluidas en el catálogo usan sus enlaces oficiales. El registro de la fuente no actualiza por sí solo una app ya instalada: comprueba las actualizaciones desde Feather.
+El procesamiento se ejecuta en macOS. Comprueba la integridad del ZIP, que haya una sola app principal, la firma de la app y sus extensiones, sus entitlements, todas las claves de privacidad *UsageDescription, el icono, el Bundle ID, la versión, el build, la versión mínima de iOS y el soporte declarado para iPad. Rechaza identificadores duplicados, datos incompatibles, archivos dañados y permisos contradictorios. Solo escribe el catálogo tras superar todas las comprobaciones.
 
-## Cambiar el nombre o la descripción sin volver a subir el IPA
+## Actualizaciones
 
-1. Abre **Actions → Edit app name and description → Run workflow**.
-2. Escribe el nombre actual tal como aparece en la fuente, el nombre nuevo y la descripción nueva.
-3. Ejecuta el flujo. GitHub actualiza y confirma `source.json`; el Bundle ID, la versión, el enlace y los permisos permanecen iguales.
+La comprobación semanal consulta releases oficiales de las aplicaciones monitorizadas que están en el catálogo. En este momento solo monitoriza PPSSPP. La revisión no publica cambios por sí sola. Para publicar una actualización verificada, abre **Actions → Check official app updates → Run workflow** y marca **Publish update**. Se comprueban el IPA oficial, su firma, Bundle ID, soporte para iPad, versión, tamaño y permisos. El flujo impide reemplazar una versión del catálogo por otra numéricamente más antigua.
 
-Si hay varias apps con el mismo nombre o el nombre actual no coincide exactamente, el flujo falla sin cambiar el catálogo. Para actualizar el IPA y los datos técnicos, usa el procedimiento de Release anterior.
+La fuente no actualiza automáticamente las apps ya instaladas en Feather; muestra los metadatos y la versión que Feather puede consultar.
 
-## Comprobar actualizaciones oficiales
+## Identidad visual
 
-GitHub consulta semanalmente los releases oficiales de Delta y PPSSPP. Cuando detecta una versión distinta, descarga el IPA, comprueba su firma y permisos con macOS y verifica Bundle ID, tamaño y soporte para iPad. La tarea programada solo informa: para aplicar una actualización, ejecuta manualmente **Actions → Check official app updates**, elige Delta o PPSSPP y marca **Publish update**. El catálogo cambia únicamente después de superar las comprobaciones.
+El icono de la fuente utiliza la imagen adjunta, conservada en JPEG cuadrado de 447 × 447 píxeles. El color verde de acento se eligió para armonizar con la imagen. No se ha añadido un encabezado ni capturas: no hay capturas oficiales de iPad verificadas para esta selección.
 
-## Auditoría y límites
+## Referencias oficiales
 
-El flujo **Audit official IPA candidates** descarga versiones concretas de los cuatro proyectos candidatos desde sus fuentes oficiales, calcula SHA-256 y verifica los metadatos del IPA y los entitlements firmados de la app y sus extensiones mediante `codesign`. También recopila todas las claves `*UsageDescription` de los `Info.plist`. El job de macOS auditó los cuatro IPA oficiales y completó las pruebas automatizadas del procesador y los flujos de metadatos. El informe completo queda en el resumen del job de GitHub Actions.
-
-AltStore exige que `appPermissions` coincida exactamente con los permisos de la descarga; rechaza apps cuyos permisos no coinciden. El procesador incluye los entitlements de la app y de las extensiones y sus claves de privacidad, y falla si no puede comprobar la firma.
-
-El comprobador no actualiza automáticamente las apps ya instaladas en Feather. Manic EMU y Gen1Recomp no se monitorizan mientras permanezcan fuera del catálogo.
+- [Formato de fuentes de AltStore Classic](https://faq.altstore.io/developers/make-a-source)
+- [Feather](https://feather.claration.dev/)
+- [Release de PPSSPP 1.20.4](https://github.com/hrydgard/ppsspp/releases/tag/v1.20.4)
+- [Release de Manic EMU 2.0.2](https://github.com/Manic-EMU/ManicEMU/releases/tag/v2.0.2)
+- [Release de Gen1Recomp 0.4.0](https://github.com/bryanthaboi/gen1recomp/releases/tag/v0.4.0)
+- [Condiciones de licencia de Gen1Recomp](https://github.com/bryanthaboi/gen1recomp/blob/dev/LICENSE.MD)

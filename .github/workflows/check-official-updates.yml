@@ -17,7 +17,6 @@ on:
         type: choice
         options:
           - all
-          - Delta
           - PPSSPP
       publish_update:
         description: Publicar en la fuente si el IPA oficial nuevo supera todas las comprobaciones

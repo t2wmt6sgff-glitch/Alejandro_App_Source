@@ -62,6 +62,16 @@ class InspectIpaTests(unittest.TestCase):
             with self.assertRaises(SystemExit):
                 process_release.inspect_ipa(ipa, Path(folder) / "expanded")
 
+    def test_rejects_corrupt_archive_crc(self):
+        with tempfile.TemporaryDirectory() as folder:
+            ipa = Path(folder) / "corrupt.ipa"
+            self.make_ipa(ipa)
+            data = bytearray(ipa.read_bytes())
+            data[40] ^= 0x01
+            ipa.write_bytes(data)
+            with self.assertRaises((SystemExit, zipfile.BadZipFile)):
+                process_release.inspect_ipa(ipa, Path(folder) / "expanded")
+
     def test_conflicting_app_and_extension_privacy_fails_closed(self):
         with tempfile.TemporaryDirectory() as folder:
             ipa = Path(folder) / "conflict.ipa"
