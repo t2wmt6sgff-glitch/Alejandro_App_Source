@@ -44,6 +44,16 @@ La comprobación semanal consulta releases oficiales de las aplicaciones monitor
 
 La fuente no actualiza automáticamente las apps ya instaladas en Feather; muestra los metadatos y la versión que Feather puede consultar.
 
+## Pruebas de compilación personalizadas para iOS
+
+La acción **Audit custom iOS build feasibility** permite probar, en un runner macOS de GitHub, los proyectos oficiales de Manic EMU o Gen1Recomp sin cargar certificados ni publicar archivos. En **Actions**, selecciónala, pulsa **Run workflow** y elige el proyecto. Un resultado correcto solo acredita que el código fuente pudo compilar en ese entorno; no acredita la firma con tu cuenta, la instalación desde Feather ni el funcionamiento en un iPad.
+
+En Manic EMU se prueba el esquema oficial `ManicEmuSideload`, que ya excluye las compras integradas y la interfaz de sincronización iCloud. La compilación de prueba omite el archivo de entitlements completo para no solicitar App Groups, iCloud, notificaciones push ni los entitlements especiales de kernel/ejecución. La integración opcional con BitBop pierde el acceso al contenedor compartido; el propio código sideload cambia a la hoja de compartir. Los entitlements especiales no se han eliminado del IPA oficial ni se afirma que todas las funciones/JIT mantengan el mismo rendimiento. Solo tras una compilación, revisión de permisos y prueba real de firma e instalación se incorporará una versión personalizada. Manic EMU está bajo AGPL-3.0: una distribución modificada exige ofrecer el código fuente correspondiente y conservar sus avisos.
+
+En Gen1Recomp la acción usa el ajuste oficial `GEN1_DISABLE_HEALTHKIT=1`. La capacidad solo sirve al puente de pasos de Pokéwalker; el juego principal no depende de él. En esa configuración la pantalla del juego/mod que consulta pasos no podrá recibirlos. El workflow no distribuye el IPA. La licencia de Gen1Recomp incluye condiciones especiales sobre su launcher y no permite redistribuir una compilación modificada/fork; por eso no se publicará una variante personalizada en esta fuente sin autorización expresa del titular.
+
+Actualmente este ordenador no tiene Xcode, un certificado de firma de Apple ni un iPad conectado. Por ello, las compilaciones de GitHub Actions son pruebas sin firma. La firma final con el certificado y el perfil concretos y la instalación en Feather quedan pendientes; no se deben interpretar como verificadas.
+
 ## Identidad visual
 
 El icono de la fuente utiliza la imagen adjunta, conservada en JPEG cuadrado de 447 × 447 píxeles. El color verde de acento se eligió para armonizar con la imagen. No se ha añadido un encabezado ni capturas: no hay capturas oficiales de iPad verificadas para esta selección.

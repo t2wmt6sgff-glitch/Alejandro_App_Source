@@ -1,0 +1,104 @@
+name: Audit custom iOS build feasibility
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Which official project to build without signing
+        required: true
+        type: choice
+        options:
+          - Manic EMU
+          - Gen1Recomp
+
+permissions:
+  contents: read
+
+jobs:
+  manic:
+    if: inputs.target == 'Manic EMU'
+    runs-on: macos-26-intel
+    timeout-minutes: 90
+    steps:
+      - name: Check out official sideload source
+        run: |
+          git clone --depth 1 --branch v2.0.2 --recurse-submodules https://github.com/Manic-EMU/ManicEMU.git "$RUNNER_TEMP/ManicEMU"
+          cd "$RUNNER_TEMP/ManicEMU"
+          git lfs install
+          git lfs pull
+          echo "UPSTREAM_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+      - name: Resolve official Xcode packages
+        run: |
+          cd "$RUNNER_TEMP/ManicEMU"
+          xcodebuild -resolvePackageDependencies \
+            -project ManicEmu/ManicEmu.xcodeproj \
+            -scheme ManicEmuSideload
+      - name: Build unsigned iPad/iPhone app
+        run: |
+          cd "$RUNNER_TEMP/ManicEMU"
+          xcodebuild \
+            -project ManicEmu/ManicEmu.xcodeproj \
+            -scheme ManicEmuSideload \
+            -configuration SideloadRelease \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath "$RUNNER_TEMP/ManicDerived" \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY= \
+            CODE_SIGN_ENTITLEMENTS= \
+            APP_BUNDLE_IDENTIFIER=com.aoshuang.manicemu \
+            APP_VERSION=2.0.2 \
+            APP_BUILD_VERSION=5
+          app="$RUNNER_TEMP/ManicDerived/Build/Products/SideloadRelease-iphoneos/ManicEmuSideload.app"
+          test -d "$app"
+          /usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$app/Info.plist"
+          /usr/libexec/PlistBuddy -c 'Print :MinimumOSVersion' "$app/Info.plist"
+          test -d "$app/PlugIns/JITEnabler.appex"
+          /usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$app/PlugIns/JITEnabler.appex/Info.plist"
+          echo "Built Manic EMU v2.0.2 from $UPSTREAM_COMMIT without signing. This does not establish Feather signing or device installation."
+
+  gen1recomp:
+    if: inputs.target == 'Gen1Recomp'
+    runs-on: macos-26-intel
+    timeout-minutes: 90
+    steps:
+      - name: Check out official source
+        run: |
+          git clone --depth 1 --branch dev https://github.com/bryanthaboi/gen1recomp.git "$RUNNER_TEMP/gen1recomp"
+          cd "$RUNNER_TEMP/gen1recomp"
+          echo "UPSTREAM_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+      - name: Fetch the upstream LÖVE/iOS dependencies
+        run: |
+          cd "$RUNNER_TEMP/gen1recomp"
+          scripts/build_ios.sh --fetch
+      - name: Make upstream no-sign test explicit
+        run: |
+          cd "$RUNNER_TEMP/gen1recomp"
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path("scripts/build_ios.sh")
+          text = path.read_text()
+          old = 'args+=(DEVELOPMENT_TEAM="$DEVELOPMENT_TEAM"\n             CODE_SIGN_STYLE=Automatic\n             -allowProvisioningUpdates)'
+          new = 'args+=(DEVELOPMENT_TEAM="$DEVELOPMENT_TEAM"\n             CODE_SIGN_STYLE=Automatic\n             CODE_SIGNING_ALLOWED=NO\n             CODE_SIGNING_REQUIRED=NO\n             CODE_SIGN_IDENTITY=\n             -allowProvisioningUpdates)'
+          if old not in text:
+              raise SystemExit("Expected upstream signing argument block changed; refusing to patch")
+          path.write_text(text.replace(old, new, 1))
+          PY
+      - name: Build with optional HealthKit capability disabled
+        env:
+          DEVELOPMENT_TEAM: 0000000000
+          GEN1_DISABLE_HEALTHKIT: "1"
+          GEN1_BUNDLE_ID: com.theboisclub.gen1recompplusplus
+        run: |
+          cd "$RUNNER_TEMP/gen1recomp"
+          scripts/build_ios.sh --device --release --ipa --version 0.4.0
+          app="$RUNNER_TEMP/gen1recomp/dist/ios/Release-iphoneos/gen1recomp++.app"
+          test -d "$app"
+          /usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$app/Info.plist"
+          /usr/libexec/PlistBuddy -c 'Print :MinimumOSVersion' "$app/Info.plist"
+          if /usr/libexec/PlistBuddy -c 'Print :com.apple.developer.healthkit' "$app/archived-expanded-entitlements.xcent" 2>/dev/null; then
+            echo 'HealthKit entitlement unexpectedly remains' >&2
+            exit 1
+          fi
+          echo "Built Gen1Recomp v0.4.0 from $UPSTREAM_COMMIT without signing, using the upstream GEN1_DISABLE_HEALTHKIT option. The Pokéwalker step bridge remains compiled; it will not work without HealthKit. No app/game data is distributed."
