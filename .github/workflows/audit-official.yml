@@ -1,0 +1,21 @@
+name: Audit official IPA candidates
+
+on:
+  push:
+    paths:
+      - '.github/workflows/audit-official.yml'
+      - 'scripts/audit_official.py'
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download and inspect official releases
+        run: python scripts/audit_official.py
