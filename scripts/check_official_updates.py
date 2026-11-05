@@ -48,8 +48,8 @@ def resolve_latest(name):
         url = asset["browser_download_url"]
         size = asset.get("size")
         release_date = data.get("published_at", "")
-        label = data.get("tag_name", "")
-    if not url.startswith("https://") or not isinstance(size, int) or size <= 0:
+        label = data.get("tag_name", "").removeprefix("v")
+    if not url.startswith("https://") or not isinstance(size, int) or size <= 0 or not release_date:
         raise ValueError("El enlace o tamaño de la descarga oficial no es válido.")
     return {"url": url, "size": size, "date": release_date[:10], "label": label}
 
@@ -131,8 +131,6 @@ def main():
                 results.append(result)
             except Exception as exc:
                 results.append({"app": name, "status": "NO VERIFICADO", "detail": str(exc)})
-    if publish and changed:
-        write_source_atomically(source)
     output = json.dumps(results, ensure_ascii=False, indent=2)
     print(output)
     summary = Path(os.environ["GITHUB_STEP_SUMMARY"])
@@ -141,6 +139,8 @@ def main():
         stream.write(f"changed={str(changed).lower()}\n")
     if any(item["status"] in ("ERROR", "NO VERIFICADO") for item in results):
         raise SystemExit("No se modificó el catálogo para las apps que no pudieron verificarse.")
+    if publish and changed:
+        write_source_atomically(source)
 
 
 if __name__ == "__main__":
