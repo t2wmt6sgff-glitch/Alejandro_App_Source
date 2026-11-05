@@ -8,7 +8,7 @@ import zipfile
 from pathlib import Path, PurePosixPath
 
 APPS = [
-    ("Delta", "https://github.com/rileytestut/Delta/releases/download/v1.6/Delta_1_6.ipa"),
+    ("Delta", "https://cdn.altstore.io/file/altstore/apps/delta/1_7_1.ipa"),
     ("Manic EMU", "https://github.com/Manic-EMU/ManicEMU/releases/download/v2.0.2/ManicEMU.v2.0.2.SideloadJIT.ipa"),
     ("PPSSPP", "https://github.com/hrydgard/ppsspp/releases/download/v1.20.4/PPSSPP-iOS-v1.20.4.ipa"),
     ("Gen1Recomp", "https://github.com/bryanthaboi/gen1recomp/releases/download/v0.4.0/gen1recomp%2B%2B-0.4.0-ios.ipa"),
