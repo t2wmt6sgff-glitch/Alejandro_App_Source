@@ -3,14 +3,24 @@ name: Add or update app from a release
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Existing published Release tag to process again after fixing a failed run
+        required: true
+        type: string
 
 permissions:
   contents: write
 
+concurrency:
+  group: source-catalog-main
+  cancel-in-progress: false
+
 jobs:
   update-source:
-    if: ${{ github.event.release.prerelease == false }}
-    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || github.event.release.prerelease == false
+    runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
         with:
@@ -18,19 +28,32 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Validate IPA and update source.json
+      - name: Load release details
+        id: release
         env:
-          RELEASE_TAG: ${{ github.event.release.tag_name }}
-          RELEASE_NAME: ${{ github.event.release.name }}
-          RELEASE_BODY: ${{ github.event.release.body }}
-          RELEASE_ASSETS: ${{ toJson(github.event.release.assets) }}
+          GH_TOKEN: ${{ github.token }}
           REPOSITORY: ${{ github.repository }}
+          RELEASE_TAG_INPUT: ${{ inputs.release_tag }}
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            gh api "repos/$REPOSITORY/releases/tags/$RELEASE_TAG_INPUT" > release.json
+          else
+            cat > release.json <<'JSON'
+          ${{ toJson(github.event.release) }}
+          JSON
+          fi
+      - name: Verify IPA signature, permissions, and metadata
+        env:
+          RELEASE_JSON: release.json
         run: python scripts/process_release.py
       - name: Commit catalog update
         run: |
-          if git diff --quiet; then exit 0; fi
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if git diff --quiet; then
+            echo "No source changes to publish."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add source.json
-          git commit -m 'Update app catalog from release'
+          git commit -m "Update app catalog from release"
           git push
