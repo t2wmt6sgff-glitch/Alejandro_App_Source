@@ -23,7 +23,7 @@ def inspect(name, url, temp):
     with urllib.request.urlopen(request, timeout=240) as response, ipa.open("wb") as output:
         output.write(response.read())
         final_host = response.geturl().split("/", 3)[2].lower()
-    if final_host != "github.com" and not final_host.endswith(".githubusercontent.com"):
+    if final_host != "github.com" and not final_host.endswith(".githubusercontent.com") and not final_host.endswith(".altstore.io"):
         raise ValueError("descarga redirigida a un dominio inesperado")
     digest = hashlib.sha256(ipa.read_bytes()).hexdigest()
     with zipfile.ZipFile(ipa) as archive:
