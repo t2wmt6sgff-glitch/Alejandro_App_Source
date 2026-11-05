@@ -48,10 +48,12 @@ Los IPA añadidos de esta forma se guardan como activos del Release, no dentro d
 
 Si hay varias apps con el mismo nombre o el nombre actual no coincide exactamente, el flujo falla sin cambiar el catálogo. Para actualizar el IPA y los datos técnicos, usa el procedimiento de Release anterior.
 
+## Comprobar actualizaciones oficiales
+
 ## Auditoría y límites
 
-El flujo **Audit official IPA candidates** descarga versiones concretas de los cuatro proyectos candidatos desde sus fuentes oficiales, calcula SHA-256 y verifica los metadatos del IPA y los entitlements firmados de la app y sus extensiones mediante `codesign`. También recopila todas las claves `*UsageDescription` de los `Info.plist`. El job de macOS y las tres pruebas automatizadas del procesador terminaron correctamente el 5 de noviembre de 2026. El informe completo queda en el resumen del job de GitHub Actions.
+El flujo **Audit official IPA candidates** descarga versiones concretas de los cuatro proyectos candidatos desde sus fuentes oficiales, calcula SHA-256 y verifica los metadatos del IPA y los entitlements firmados de la app y sus extensiones mediante `codesign`. También recopila todas las claves `*UsageDescription` de los `Info.plist`. El job de macOS auditó los cuatro IPA oficiales y completó las pruebas automatizadas del procesador y los flujos de metadatos. El informe completo queda en el resumen del job de GitHub Actions. El informe completo queda en el resumen del job de GitHub Actions.
 
 AltStore exige que `appPermissions` coincida exactamente con los permisos de la descarga; rechaza apps cuyos permisos no coinciden. El procesador incluye los entitlements de la app y de las extensiones y sus claves de privacidad, y falla si no puede comprobar la firma.
 
-La comprobación de firma no es una instalación real ni una prueba de ejecución en iPadOS 26. No se publican automáticamente actualizaciones ajenas: las versiones deben volver a analizarse y revisarse antes de entrar en la fuente. No se guardan certificados, perfiles ni credenciales en este repositorio.
+`Check official app updates` consulta semanalmente las fuentes oficiales de Delta y PPSSPP. Si hay una versión nueva, descarga su IPA, compara el Bundle ID y el tamaño, extrae los permisos firmados en macOS y verifica el soporte para iPad. La ejecución programada solo genera un informe. Para publicar una versión verificada, abre **Actions → Check official app updates → Run workflow**, elige la app y marca **Publish update**. Ese paso manual actualiza los metadatos de la fuente; no actualiza las instalaciones existentes en Feather. Manic EMU y Gen1Recomp no se monitorizan mientras permanezcan fuera del catálogo.
