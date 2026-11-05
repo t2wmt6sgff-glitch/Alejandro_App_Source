@@ -153,6 +153,8 @@ def main():
         fail("Bundle ID ausente o con formato no admitido.")
     if not all(isinstance(value, str) and value.strip() for value in (version, build, minimum)):
         fail("Faltan versión, build o MinimumOSVersion.")
+    if 2 not in info.get("UIDeviceFamily", []):
+        fail("El IPA no declara compatibilidad con iPad; catálogo sin cambios.")
     name = (event.get("name") or "").strip()
     description = (event.get("body") or "").strip()
     if not name or not description:
