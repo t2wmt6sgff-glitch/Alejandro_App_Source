@@ -6,6 +6,7 @@ on:
       - '.github/workflows/audit-official.yml'
       - 'scripts/audit_official.py'
       - 'scripts/process_release.py'
+      - 'scripts/update_app_details.py'
   workflow_dispatch:
 
 permissions:
