@@ -1,0 +1,44 @@
+name: Edit app name and description
+
+on:
+  workflow_dispatch:
+    inputs:
+      current_name:
+        description: Nombre que la app tiene ahora en la fuente
+        required: true
+        type: string
+      new_name:
+        description: Nombre que aparecerá en Feather
+        required: true
+        type: string
+      description:
+        description: Nueva descripción en español
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  edit-details:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Update catalog details
+        env:
+          CURRENT_NAME: ${{ inputs.current_name }}
+          NEW_NAME: ${{ inputs.new_name }}
+          APP_DESCRIPTION: ${{ inputs.description }}
+        run: python scripts/update_app_details.py "$CURRENT_NAME" "$NEW_NAME" "$APP_DESCRIPTION"
+      - name: Commit catalog change
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add source.json
+          if git diff --cached --quiet; then
+            echo "No hay cambios que guardar."
+          else
+            git commit -m "Update app display details"
+            git push
+          fi
