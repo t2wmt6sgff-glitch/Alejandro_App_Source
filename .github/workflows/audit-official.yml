@@ -5,6 +5,7 @@ on:
     paths:
       - '.github/workflows/audit-official.yml'
       - 'scripts/audit_official.py'
+      - 'scripts/process_release.py'
   workflow_dispatch:
 
 permissions:
