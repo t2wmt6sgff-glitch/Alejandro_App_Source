@@ -1,4 +1,5 @@
 import json
+import os
 from pathlib import Path
 import sys
 
@@ -23,7 +24,17 @@ def main():
         raise SystemExit("ERROR: hay Bundle ID duplicados; no se ha modificado el catálogo.")
     entry["name"] = new_name
     entry["localizedDescription"] = new_description
-    SOURCE.write_text(json.dumps(source, ensure_ascii=False, indent=2) + chr(10), encoding="utf-8")
+    rendered = json.dumps(source, ensure_ascii=False, indent=2) + chr(10)
+    temporary_source = SOURCE.with_name(SOURCE.name + ".tmp")
+    try:
+        with temporary_source.open("w", encoding="utf-8") as output:
+            output.write(rendered)
+            output.flush()
+            os.fsync(output.fileno())
+        temporary_source.replace(SOURCE)
+    finally:
+        if temporary_source.exists():
+            temporary_source.unlink()
     print("Nombre y descripción actualizados. Bundle ID conservado:", entry["bundleIdentifier"])
 
 
