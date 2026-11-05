@@ -6,12 +6,14 @@ https://raw.githubusercontent.com/t2wmt6sgff-glitch/Alejandro_App_Source/main/so
 
 ## Aplicaciones publicadas
 
-| Aplicación | Versión | Bundle ID | Estado de comprobación |
+| Aplicación | Versión | Bundle ID | Descripción publicada |
 |---|---:|---|---|
-| Delta | 1.7.1 (139) | `com.rileytestut.Delta` | IPA oficial descargado y analizado en macOS; firma, permisos, mínimo iOS 14 y familia iPad verificados. |
-| PPSSPP | 1.20.4 | `org.ppsspp.ppsspp` | IPA del release oficial descargado y analizado en macOS; firma, permisos, mínimo iOS 11 y familia iPad verificados. |
+| Delta | 1.7.1 (139) | `com.rileytestut.Delta` | Emulador para iPad de NES, SNES, Nintendo 64, Game Boy, Game Boy Color, Game Boy Advance y Nintendo DS. Ofrece controles táctiles y para mandos, partidas guardadas y sincronización en la nube. No incluye juegos. |
+| PPSSPP | 1.20.4 | `org.ppsspp.ppsspp` | Emulador de PlayStation Portable para iPad. Permite cargar copias de juegos, configurar controles y mandos y ajustar gráficos y rendimiento. No requiere BIOS y no incluye juegos. |
 
-Las dos descargas apuntan directamente a los proveedores oficiales; este repositorio no vuelve a alojar sus IPA. Las versiones, IDs y permisos de `source.json` salen del archivo IPA. Las claves de privacidad se conservan en el idioma que usa el IPA. El análisis no prueba que la app se ejecute en iPadOS 26 ni que cada juego funcione.
+IPA oficial descargado y analizado en macOS para ambas apps; firma, permisos, mínimo de iOS y familia iPad verificados. Las descripciones completas en español y los avisos para usar únicamente copias que tengas derecho a utilizar aparecen en la fuente.
+
+Las dos descargas apuntan directamente a los proveedores oficiales ([Delta en la fuente de AltStore](https://apps.altstore.io/) y [PPSSPP en su release](https://github.com/hrydgard/ppsspp/releases/tag/v1.20.4)); este repositorio no vuelve a alojar sus IPA. Las versiones, IDs y permisos de `source.json` salen del archivo IPA. Las claves de privacidad se conservan en el idioma que usa el IPA. El análisis no prueba que la app se ejecute en iPadOS 26 ni que cada juego funcione.
 
 ## Candidatas comprobadas y no publicadas
 
