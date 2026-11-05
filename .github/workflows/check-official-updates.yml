@@ -1,0 +1,49 @@
+name: Check official app updates
+
+on:
+  schedule:
+    - cron: '17 14 * * 1'
+  workflow_dispatch:
+    inputs:
+      application:
+        description: Aplicación oficial que quieres comprobar
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - Delta
+          - PPSSPP
+      publish_update:
+        description: Publicar en la fuente si el IPA oficial nuevo supera todas las comprobaciones
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+jobs:
+  check:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check and verify official release
+        id: update
+        env:
+          APP_SELECTION: ${{ inputs.application || 'all' }}
+          PUBLISH_UPDATE: ${{ inputs.publish_update || false }}
+        run: python scripts/check_official_updates.py
+      - name: Commit verified source update
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish_update && steps.update.outputs.changed == 'true' }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add source.json
+          git commit -m "Update verified official app version"
+          git push
