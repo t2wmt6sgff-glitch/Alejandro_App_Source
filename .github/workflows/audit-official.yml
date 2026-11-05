@@ -7,6 +7,8 @@ on:
       - 'scripts/audit_official.py'
       - 'scripts/process_release.py'
       - 'scripts/update_app_details.py'
+      - 'scripts/check_official_updates.py'
+      - 'tests/**'
   workflow_dispatch:
 
 permissions:
