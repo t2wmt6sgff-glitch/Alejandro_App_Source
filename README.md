@@ -50,6 +50,8 @@ Si hay varias apps con el mismo nombre o el nombre actual no coincide exactament
 
 ## Comprobar actualizaciones oficiales
 
+GitHub consulta semanalmente los releases oficiales de Delta y PPSSPP. Cuando detecta una versión distinta, descarga el IPA, comprueba su firma y permisos con macOS y verifica Bundle ID, tamaño y soporte para iPad. La tarea programada solo informa: para aplicar una actualización, ejecuta manualmente **Actions → Check official app updates**, elige Delta o PPSSPP y marca **Publish update**. El catálogo cambia únicamente después de superar las comprobaciones.
+
 ## Auditoría y límites
 
 El flujo **Audit official IPA candidates** descarga versiones concretas de los cuatro proyectos candidatos desde sus fuentes oficiales, calcula SHA-256 y verifica los metadatos del IPA y los entitlements firmados de la app y sus extensiones mediante `codesign`. También recopila todas las claves `*UsageDescription` de los `Info.plist`. El job de macOS auditó los cuatro IPA oficiales y completó las pruebas automatizadas del procesador y los flujos de metadatos. El informe completo queda en el resumen del job de GitHub Actions. El informe completo queda en el resumen del job de GitHub Actions.
