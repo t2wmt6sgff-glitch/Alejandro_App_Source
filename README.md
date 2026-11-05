@@ -40,6 +40,14 @@ El Bundle ID del IPA identifica la entrada. Publicar otra versión con el mismo 
 
 Los IPA añadidos de esta forma se guardan como activos del Release, no dentro del historial Git. Las aplicaciones de terceros incluidas en el catálogo usan sus enlaces oficiales. El registro de la fuente no actualiza por sí solo una app ya instalada: comprueba las actualizaciones desde Feather.
 
+## Cambiar el nombre o la descripción sin volver a subir el IPA
+
+1. Abre **Actions → Edit app name and description → Run workflow**.
+2. Escribe el nombre actual tal como aparece en la fuente, el nombre nuevo y la descripción nueva.
+3. Ejecuta el flujo. GitHub actualiza y confirma `source.json`; el Bundle ID, la versión, el enlace y los permisos permanecen iguales.
+
+Si hay varias apps con el mismo nombre o el nombre actual no coincide exactamente, el flujo falla sin cambiar el catálogo. Para actualizar el IPA y los datos técnicos, usa el procedimiento de Release anterior.
+
 ## Auditoría y límites
 
 El flujo **Audit official IPA candidates** descarga versiones concretas de los cuatro proyectos candidatos desde sus fuentes oficiales, calcula SHA-256 y verifica los metadatos del IPA y los entitlements firmados de la app y sus extensiones mediante `codesign`. También recopila todas las claves `*UsageDescription` de los `Info.plist`. El job de macOS y las tres pruebas automatizadas del procesador terminaron correctamente el 5 de noviembre de 2026. El informe completo queda en el resumen del job de GitHub Actions.
