@@ -1,33 +1,47 @@
 # Fuente personal de AltStore Classic para Feather
 
-Añade en Feather la URL pública de la fuente:
+Añade esta fuente en Feather:
 
 https://raw.githubusercontent.com/t2wmt6sgff-glitch/Alejandro_App_Source/main/source.json
 
-El nombre exacto del repositorio es `Alejandro_App_Source` (con guiones bajos).
+## Aplicaciones publicadas
 
-## Incorporar una app propia mediante GitHub Releases
+| Aplicación | Versión | Bundle ID | Estado de comprobación |
+|---|---:|---|---|
+| Delta | 1.7.1 (139) | `com.rileytestut.Delta` | IPA oficial descargado y analizado en macOS; firma, permisos, mínimo iOS 14 y familia iPad verificados. |
+| PPSSPP | 1.20.4 | `org.ppsspp.ppsspp` | IPA del release oficial descargado y analizado en macOS; firma, permisos, mínimo iOS 11 y familia iPad verificados. |
 
-1. En GitHub, abre **Releases → Draft a new release**.
-2. Crea una etiqueta nueva para esta versión, por ejemplo `mi-app-1.2`. No reutilices etiquetas.
-3. En el título del Release, escribe el nombre que aparecerá en Feather.
-4. En el texto del Release, escribe la descripción en español.
-5. Adjunta exactamente un IPA que tengas permiso para publicar. No adjuntes certificados, perfiles de aprovisionamiento ni contraseñas.
-6. Publica el Release. Actions descarga el IPA y ejecuta la inspección en un runner macOS. Lee los metadatos y el icono del propio IPA, verifica los entitlements firmados de la app y de sus extensiones con `codesign`, y recopila las claves `*UsageDescription` de los `Info.plist`.
-7. Solo si todas las comprobaciones pasan, actualiza `source.json` y añade el icono pequeño a `icons/`. Abre **Actions** para ver el resultado y el error si falla.
+Las dos descargas apuntan directamente a los proveedores oficiales; este repositorio no vuelve a alojar sus IPA. Las versiones, IDs y permisos de `source.json` salen del archivo IPA. Las claves de privacidad se conservan en el idioma que usa el IPA. El análisis no prueba que la app se ejecute en iPadOS 26 ni que cada juego funcione.
 
-Un Bundle ID identifica una sola entrada. Para cambiar el nombre o la descripción, publícala de nuevo en un Release para el mismo Bundle ID. Cada versión debe usar etiqueta nueva. Para reintentar tras corregir un fallo, abre el flujo **Add or update app from a release** en **Actions → Run workflow** e indica la etiqueta del Release ya publicado.
+## Candidatas comprobadas y no publicadas
 
-Las URLs de descarga apuntan al activo del Release. El catálogo representa una versión publicada, pero no actualiza por sí solo las apps ya instaladas en Feather; la actualización se inicia desde Feather.
+| Candidata | Resultado | Motivo |
+|---|---|---|
+| Manic EMU 2.0.2 (build 5) | IPA oficial válido, firmado, versión iPad; análisis de permisos completo. | Declara entitlements de kernel, ejecución sostenida, notificaciones y contenedores iCloud. No se ha verificado que la firma habitual que se usa en Feather pueda satisfacerlos, así que no la publico como instalación normal. |
+| Gen1Recomp 0.4.0 (build 400) | IPA oficial válido, firmado, versión iPad; análisis de permisos completo. | Declara HealthKit, cuya capacidad de firma no está verificada para Feather. Además, la licencia oficial impone condiciones específicas al launcher incluido y exige atribución. El proyecto requiere que aportes tu propia ROM; no incluye ROM. |
 
-## Verificación de las cuatro candidatas
+Ambas candidatas tienen IPA verificables, pero eso por sí solo no confirma que se puedan instalar sin capacidades especiales. No incluí una aplicación hasta resolver ese punto. No redistribuimos sus IPA.
 
-La auditoría **Audit official IPA candidates** descarga los IPA enlazados desde los Releases oficiales y genera un informe de Bundle ID, versión, build, mínimo de iOS, permisos firmados, permisos de privacidad, hash SHA-256 y soporte declarado para iPad. El informe indica por separado que la ejecución real en iPadOS 26 no se ha probado. La fuente no incluye apps mientras no se haya completado y revisado ese informe.
+## Añadir o actualizar una aplicación desde GitHub
 
-Los enlaces del catálogo deben seguir apuntando a las páginas/activos oficiales para evitar espejar IPA sin autorización. Que una IPA aparezca en GitHub no supone por sí mismo un permiso general para que otra persona la vuelva a alojar. El procedimiento de Release propio sirve para artefactos cuya publicación está autorizada.
+Necesitas tener permiso para publicar el IPA:
 
-## Límites
+1. Abre este repositorio en GitHub y pulsa **Releases → Draft a new release**.
+2. Crea una etiqueta nueva y única, por ejemplo `mi-app-1.2`. Para un cambio de descripción o una nueva versión de la misma app, la etiqueta debe ser nueva.
+3. En el título del Release escribe el nombre que quieres que aparezca en Feather.
+4. En el texto del Release escribe la descripción en español.
+5. Arrastra un único archivo `.ipa` al apartado de archivos adjuntos. No incluyas certificados, perfiles de aprovisionamiento ni contraseñas.
+6. Pulsa **Publish release**. GitHub Actions descargará el IPA en un runner macOS, analizará la app y todas sus extensiones, y validará firma, Bundle ID, versión, build, versión mínima, soporte iPad, privacidad, icono y tamaño.
+7. Si todas las comprobaciones pasan, Actions actualiza `source.json` y el icono. Si falla algo, el catálogo no se actualiza; abre la ejecución fallida en **Actions** para leer el error en español.
 
-La inspección de firma comprueba los permisos de la IPA recibida, pero no prueba su ejecución en un iPad. Compatibilidad de CPU, funciones que dependen de JIT y comportamiento de iPadOS 26 deben verificarse aparte. No se importan automáticamente versiones desde otros proyectos ni se actualizan automáticamente las instalaciones existentes.
+El Bundle ID del IPA identifica la entrada. Publicar otra versión con el mismo Bundle ID la actualiza y conserva ese identificador. Un Bundle ID ya existente no crea una entrada duplicada. Si el primer procesamiento falla, corrige el Release y vuelve a ejecutarlo desde **Actions → Add or update app from a release → Run workflow**, indicando la etiqueta ya publicada.
 
-La fuente inicial permanece vacía hasta que la auditoría confirme los permisos de los IPA concretos y se revise cada URL oficial de descarga y su derecho de redistribución.
+Los IPA añadidos de esta forma se guardan como activos del Release, no dentro del historial Git. Las aplicaciones de terceros incluidas en el catálogo usan sus enlaces oficiales. El registro de la fuente no actualiza por sí solo una app ya instalada: comprueba las actualizaciones desde Feather.
+
+## Auditoría y límites
+
+El flujo **Audit official IPA candidates** descarga versiones concretas de los cuatro proyectos candidatos desde sus fuentes oficiales, calcula SHA-256 y verifica los metadatos del IPA y los entitlements firmados de la app y sus extensiones mediante `codesign`. También recopila todas las claves `*UsageDescription` de los `Info.plist`. El job de macOS y las tres pruebas automatizadas del procesador terminaron correctamente el 5 de noviembre de 2026. El informe completo queda en el resumen del job de GitHub Actions.
+
+AltStore exige que `appPermissions` coincida exactamente con los permisos de la descarga; rechaza apps cuyos permisos no coinciden. El procesador incluye los entitlements de la app y de las extensiones y sus claves de privacidad, y falla si no puede comprobar la firma.
+
+La comprobación de firma no es una instalación real ni una prueba de ejecución en iPadOS 26. No se publican automáticamente actualizaciones ajenas: las versiones deben volver a analizarse y revisarse antes de entrar en la fuente. No se guardan certificados, perfiles ni credenciales en este repositorio.
