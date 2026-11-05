@@ -204,7 +204,7 @@ def main():
     json.loads(rendered)
     temporary_source = SOURCE.with_name(SOURCE.name + ".tmp")
     try:
-        with temporary_source.open("w", encoding="utf-8", newline="\\n") as output:
+        with temporary_source.open("w", encoding="utf-8") as output:
             output.write(rendered)
             output.flush()
             os.fsync(output.fileno())
