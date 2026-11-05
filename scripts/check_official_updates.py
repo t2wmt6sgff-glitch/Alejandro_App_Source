@@ -4,7 +4,10 @@ import tempfile
 import urllib.request
 from pathlib import Path
 
-from scripts.audit_official import inspect
+try:
+    from .audit_official import inspect
+except ImportError:
+    from audit_official import inspect
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "source.json"
