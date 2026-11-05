@@ -55,7 +55,11 @@ def inspect(name, url, temp):
                         target.write_bytes(archive.read(member))
             plist_path = bundle_root + "Info.plist"
             bundle_info = plistlib.loads(archive.read(plist_path))
-            privacy.update({k: v for k, v in bundle_info.items() if k.endswith("UsageDescription") and isinstance(v, str)})
+            for key, value in bundle_info.items():
+                if key.endswith("UsageDescription") and isinstance(value, str):
+                    if key in privacy and privacy[key] != value:
+                        raise ValueError(f"descripciones de privacidad contradictorias para {key}")
+                    privacy[key] = value
             result = subprocess.run(["codesign", "-d", "--entitlements", ":-", str(bundle_path)], capture_output=True)
             output = result.stdout + b"\n" + result.stderr
             if result.returncode:
