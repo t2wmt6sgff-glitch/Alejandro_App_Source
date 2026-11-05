@@ -1,4 +1,5 @@
 import datetime
+import os
 import json
 import os
 import plistlib
@@ -83,6 +84,8 @@ def inspect_ipa(ipa_path, extraction_root):
             bundle_info = plistlib.loads(archive.read(info_path))
             for key, value in bundle_info.items():
                 if key.endswith("UsageDescription") and isinstance(value, str):
+                    if key in privacy and privacy[key] != value:
+                        fail(f"Descripción de privacidad contradictoria para {key}; catálogo sin cambios.")
                     privacy[key] = value
             if root == main_root:
                 app_path = bundle_path
@@ -199,7 +202,16 @@ def main():
         fail("La actualización produciría duplicados; source.json no se ha modificado.")
     rendered = json.dumps(source, ensure_ascii=False, indent=2) + "\n"
     json.loads(rendered)
-    SOURCE.write_text(rendered, encoding="utf-8")
+    temporary_source = SOURCE.with_name(SOURCE.name + ".tmp")
+    try:
+        with temporary_source.open("w", encoding="utf-8", newline="\\n") as output:
+            output.write(rendered)
+            output.flush()
+            os.fsync(output.fileno())
+        temporary_source.replace(SOURCE)
+    finally:
+        if temporary_source.exists():
+            temporary_source.unlink()
     print(f"Verificado con codesign: {bundle} {version} ({build}); permisos de app y extensiones incorporados.")
 
 
