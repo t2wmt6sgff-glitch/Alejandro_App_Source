@@ -54,6 +54,6 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add source.json
+          git add source.json icons/
           git commit -m "Update app catalog from release"
           git push
