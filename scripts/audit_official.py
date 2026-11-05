@@ -17,6 +17,7 @@ IGNORED = {"application-identifier", "com.apple.developer.team-identifier"}
 
 
 def inspect(name, url, temp):
+    temp.mkdir(parents=True, exist_ok=True)
     request = urllib.request.Request(url, headers={"User-Agent": "AltStore-source-official-audit"})
     ipa = temp / (name.replace(" ", "_") + ".ipa")
     with urllib.request.urlopen(request, timeout=240) as response, ipa.open("wb") as output:
