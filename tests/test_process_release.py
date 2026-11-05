@@ -62,6 +62,28 @@ class InspectIpaTests(unittest.TestCase):
             with self.assertRaises(SystemExit):
                 process_release.inspect_ipa(ipa, Path(folder) / "expanded")
 
+    def test_conflicting_app_and_extension_privacy_fails_closed(self):
+        with tempfile.TemporaryDirectory() as folder:
+            ipa = Path(folder) / "conflict.ipa"
+            with zipfile.ZipFile(ipa, "w") as archive:
+                archive.writestr("Payload/Demo.app/Info.plist", plist(
+                    CFBundleIdentifier="com.example.demo",
+                    CFBundleName="Demo",
+                    CFBundleShortVersionString="1.2",
+                    CFBundleVersion="12",
+                    MinimumOSVersion="15.0",
+                    CFBundleIcons={"CFBundlePrimaryIcon": {"CFBundleIconFiles": ["AppIcon"]}},
+                    NSCameraUsageDescription="Camera use in app",
+                ))
+                archive.writestr("Payload/Demo.app/AppIcon.png", PNG)
+                archive.writestr("Payload/Demo.app/PlugIns/Share.appex/Info.plist", plist(
+                    CFBundleIdentifier="com.example.demo.share",
+                    NSCameraUsageDescription="Different camera use in extension",
+                ))
+            with patch.object(process_release, "signed_entitlements", return_value={}):
+                with self.assertRaisesRegex(SystemExit, "contradictoria"):
+                    process_release.inspect_ipa(ipa, Path(folder) / "expanded")
+
     def test_codesign_failure_is_fatal(self):
         with patch.object(process_release.subprocess, "run", return_value=type("Result", (), {
             "stdout": b"", "stderr": b"code object is not signed", "returncode": 1,
