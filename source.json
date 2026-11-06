@@ -1,7 +1,7 @@
 {
   "name": "Apps de EL ALE :)",
-  "subtitle": "Una selección personal de juegos y emulación para iPad.",
-  "description": "Bienvenido a Apps de EL ALE :), un catálogo personal y cuidado de aplicaciones para iPad. Aquí encontrarás proyectos oficiales de emulación, con información en español y enlaces a sus versiones verificadas. Usa únicamente copias de juegos y archivos de sistema cuyo uso tengas legalmente permitido.",
+  "subtitle": "Aplicaciones utiles para leo",
+  "description": "Aqui puedes instalar spoti, yt y emuladores subidos por mi",
   "iconURL": "https://raw.githubusercontent.com/t2wmt6sgff-glitch/Alejandro_App_Source/main/assets/source-icon.jpg",
   "tintColor": "#31563B",
   "featuredApps": [
@@ -12,7 +12,7 @@
       "name": "PPSSPP",
       "bundleIdentifier": "org.ppsspp.ppsspp",
       "developerName": "Henrik Rydgård y colaboradores",
-      "subtitle": "Juega a tus copias de PSP con controles y gráficos configurables.",
+      "subtitle": "Juega a juegos de PSP con controles y gráficos configurables.",
       "localizedDescription": "Emulador de PlayStation Portable para iPad. Permite ajustar opciones gráficas y de rendimiento, personalizar los controles táctiles y utilizar mandos compatibles. No requiere BIOS ni incluye juegos: importa únicamente copias de juegos que hayas obtenido legalmente.",
       "iconURL": "https://raw.githubusercontent.com/hrydgard/ppsspp/v1.20.4/icons/hicolor/512x512/apps/ppsspp.png",
       "tintColor": "#31563B",
