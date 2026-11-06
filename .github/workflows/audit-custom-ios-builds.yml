@@ -32,7 +32,86 @@ jobs:
           cd "$RUNNER_TEMP/ManicEMU"
           xcodebuild -resolvePackageDependencies \
             -project ManicEmu/ManicEmu.xcodeproj \
-            -scheme ManicEmuSideload
+            -scheme ManicEmuSideload \
+            -derivedDataPath "$RUNNER_TEMP/ManicDerived" \
+            -clonedSourcePackagesDirPath "$RUNNER_TEMP/ManicPackages"
+      - name: Prepare a pinned R.swift CLI generator
+        run: |
+          package="$RUNNER_TEMP/ManicPackages/checkouts/R.swift"
+          resolved="$(find "$RUNNER_TEMP/ManicEMU/ManicEmu/ManicEmu.xcodeproj" -name Package.resolved -print -quit)"
+          test -d "$package"
+          test -s "$resolved"
+          cp "$resolved" "$package/Package.resolved"
+          swift build --package-path "$package" --product rswift --configuration release
+          rswift="$package/.build/release/rswift"
+          test -x "$rswift"
+          echo "RSWIFT_BIN=$rswift" >> "$GITHUB_ENV"
+      - name: Replace the unapproved build plugin in the temporary project
+        run: |
+          python3 - "$RUNNER_TEMP/ManicEMU/ManicEmu/ManicEmu.xcodeproj/project.pbxproj" "$RUNNER_TEMP/ManicEMU/ManicEmu/R.generated.swift" <<'PY'
+          import re
+          import sys
+          from pathlib import Path
+
+          project = Path(sys.argv[1])
+          generated = Path(sys.argv[2])
+          text = project.read_text()
+          plugin_dependency = "57909381303C7D9100A53656"
+          source_phase = "57909384303C7D9100A53656"
+          target = "57909380303C7D9100A53656"
+          build_file = "A1A1A1A1A1A1A1A1A1A1A1A1"
+          file_ref = "B2B2B2B2B2B2B2B2B2B2B2B2"
+          script_phase = "C3C3C3C3C3C3C3C3C3C3C3C3"
+          if any(identifier in text for identifier in (build_file, file_ref, script_phase)):
+              raise SystemExit("Temporary R.swift project identifiers already exist")
+          target_start = text.index(f"{target} /* ManicEmuSideload */ = {{")
+          target_end = text.index("\n\t\t};", target_start) + len("\n\t\t};")
+          target_block = text[target_start:target_end]
+          dependency_line = f"\t\t\t\t{plugin_dependency} /* PBXTargetDependency */,\n"
+          if target_block.count(dependency_line) != 1:
+              raise SystemExit("Expected exactly one R.swift plug-in dependency in ManicEmuSideload")
+          target_block = target_block.replace(dependency_line, "", 1)
+          phases_marker = "buildPhases = (\n"
+          if target_block.count(phases_marker) != 1:
+              raise SystemExit("Could not locate ManicEmuSideload build phases")
+          target_block = target_block.replace(phases_marker, phases_marker + f"\t\t\t\t{script_phase} /* Generate R.swift resources */,\n", 1)
+          text = text[:target_start] + target_block + text[target_end:]
+          dependency_object = re.compile(
+              rf"\n\t\t{plugin_dependency} /\* PBXTargetDependency \*/ = \{{.*?\n\t\t\}};\n", re.S
+          )
+          text, removed = dependency_object.subn("\n", text, count=1)
+          if removed != 1:
+              raise SystemExit("Could not remove the temporary R.swift plug-in target dependency")
+          build_file_entry = f"\t\t{build_file} /* R.generated.swift in Sources */ = {{isa = PBXBuildFile; fileRef = {file_ref} /* R.generated.swift */; }};\n"
+          text = text.replace("/* Begin PBXBuildFile section */\n", "/* Begin PBXBuildFile section */\n" + build_file_entry, 1)
+          file_ref_entry = f"\t\t{file_ref} /* R.generated.swift */ = {{isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = R.generated.swift; path = \"{generated}\"; sourceTree = \"<absolute>\"; }};\n"
+          text = text.replace("/* Begin PBXFileReference section */\n", "/* Begin PBXFileReference section */\n" + file_ref_entry, 1)
+          source_re = re.compile(rf"({source_phase} /\* Sources \*/ = \{{.*?files = \(\n)", re.S)
+          text, count = source_re.subn(rf"\1\t\t\t\t{build_file} /* R.generated.swift in Sources */,\n", text, count=1)
+          if count != 1:
+              raise SystemExit("Could not add generated R.swift to the sideload source phase")
+          script = (
+              "/* Begin PBXShellScriptBuildPhase section */\n"
+              f"\t\t{script_phase} /* Generate R.swift resources */ = {{\n"
+              "\t\t\tisa = PBXShellScriptBuildPhase;\n"
+              "\t\t\tbuildActionMask = 2147483647;\n"
+              "\t\t\tfiles = (\n\t\t\t);\n"
+              "\t\t\tinputPaths = (\n\t\t\t);\n"
+              "\t\t\tname = \"Generate R.swift resources\";\n"
+              "\t\t\toutputPaths = (\n\t\t\t\t\"$(SRCROOT)/R.generated.swift\",\n\t\t\t);\n"
+              "\t\t\trunOnlyForDeploymentPostprocessing = 0;\n"
+              "\t\t\tshellPath = /bin/sh;\n"
+              "\t\t\tshellScript = \"\\\"$RSWIFT_BIN\\\" generate \\\"$SRCROOT/R.generated.swift\\\"\\n\";\n"
+              "\t\t\tshowEnvVarsInLog = 0;\n"
+              "\t\t};\n"
+              "/* End PBXShellScriptBuildPhase section */"
+          )
+          if "/* Begin PBXShellScriptBuildPhase section */" not in text:
+              raise SystemExit("Could not locate Xcode shell script build phases")
+          text = text.replace("/* Begin PBXShellScriptBuildPhase section */", script, 1)
+          project.write_text(text)
+          print("Temporary project now runs the pinned R.swift CLI before compiling resources; the Xcode plug-in is not invoked.")
+          PY
       - name: Build unsigned iPad/iPhone app
         run: |
           cd "$RUNNER_TEMP/ManicEMU"
@@ -43,6 +122,7 @@ jobs:
             -sdk iphoneos \
             -destination 'generic/platform=iOS' \
             -derivedDataPath "$RUNNER_TEMP/ManicDerived" \
+            -clonedSourcePackagesDirPath "$RUNNER_TEMP/ManicPackages" \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGN_IDENTITY= \
