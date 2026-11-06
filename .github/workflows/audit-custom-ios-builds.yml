@@ -37,10 +37,13 @@ jobs:
             -clonedSourcePackagesDirPath "$RUNNER_TEMP/ManicPackages"
       - name: Prepare a pinned R.swift CLI generator
         run: |
-          package="$RUNNER_TEMP/ManicPackages/checkouts/R.swift"
+          source_package="$RUNNER_TEMP/ManicPackages/checkouts/R.swift"
+          package="$RUNNER_TEMP/Rswift-cli"
           resolved="$(find "$RUNNER_TEMP/ManicEMU/ManicEmu/ManicEmu.xcodeproj" -name Package.resolved -print -quit)"
-          test -d "$package"
+          test -d "$source_package"
           test -s "$resolved"
+          cp -R "$source_package" "$package"
+          chmod -R u+w "$package"
           cp "$resolved" "$package/Package.resolved"
           swift build --package-path "$package" --product rswift --configuration release
           rswift="$package/.build/release/rswift"
