@@ -33,10 +33,6 @@ jobs:
           xcodebuild -resolvePackageDependencies \
             -project ManicEmu/ManicEmu.xcodeproj \
             -scheme ManicEmuSideload
-      - name: Approve the pinned R.swift build plug-in for CI
-        run: |
-          # R.swift documents this exact CI setting so Xcode can fingerprint its plug-in without an interactive prompt.
-          defaults write com.apple.dt.Xcode IDESkipPackagePluginFingerprintValidatation -bool YES
       - name: Build unsigned iPad/iPhone app
         run: |
           cd "$RUNNER_TEMP/ManicEMU"
