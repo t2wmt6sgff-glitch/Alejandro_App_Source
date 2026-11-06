@@ -13,7 +13,7 @@
       "bundleIdentifier": "org.ppsspp.ppsspp",
       "developerName": "Henrik Rydgård y colaboradores",
       "subtitle": "Juega a juegos de PSP con controles y gráficos configurables.",
-      "localizedDescription": "Emulador de PlayStation Portable para iPad. Permite ajustar opciones gráficas y de rendimiento, personalizar los controles táctiles y utilizar mandos compatibles. No requiere BIOS ni incluye juegos: importa únicamente copias de juegos que hayas obtenido legalmente.",
+      "localizedDescription": "Emulador de PlayStation Portable para iPad. Permite ajustar opciones gráficas y de rendimiento, personalizar los controles táctiles y utilizar mandos compatibles. No incluye juegos.",
       "iconURL": "https://raw.githubusercontent.com/hrydgard/ppsspp/v1.20.4/icons/hicolor/512x512/apps/ppsspp.png",
       "tintColor": "#31563B",
       "category": "games",
