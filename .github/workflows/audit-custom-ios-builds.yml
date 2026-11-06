@@ -51,6 +51,7 @@ jobs:
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGN_IDENTITY= \
             CODE_SIGN_ENTITLEMENTS= \
+            IPHONEOS_DEPLOYMENT_TARGET=15.0 \
             APP_BUNDLE_IDENTIFIER=com.aoshuang.manicemu \
             APP_VERSION=2.0.2 \
             APP_BUILD_VERSION=5
@@ -58,6 +59,43 @@ jobs:
           test -d "$app"
           /usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$app/Info.plist"
           /usr/libexec/PlistBuddy -c 'Print :MinimumOSVersion' "$app/Info.plist"
+          ipa="$RUNNER_TEMP/gen1recomp/dist/ios/gen1recomp++.ipa"
+          test -s "$ipa"
+          unzip -tq "$ipa"
+          ipa_dir="$(mktemp -d)"
+          trap 'rm -rf "$ipa_dir"' EXIT
+          unzip -q "$ipa" -d "$ipa_dir"
+          ipa_app="$ipa_dir/Payload/gen1recomp++.app"
+          test -d "$ipa_app"
+          python3 - "$ipa_app" <<'PY'
+          import plistlib
+          import sys
+          from pathlib import Path
+
+          app = Path(sys.argv[1])
+          info = plistlib.loads((app / "Info.plist").read_bytes())
+          assert info.get("CFBundleIdentifier") == "com.theboisclub.gen1recompplusplus", info.get("CFBundleIdentifier")
+          assert info.get("CFBundleShortVersionString") == "0.4.1", info.get("CFBundleShortVersionString")
+          print("IPA bundle:", info["CFBundleIdentifier"])
+          print("IPA version/build:", info.get("CFBundleShortVersionString"), info.get("CFBundleVersion"))
+          print("IPA minimum iOS:", info.get("MinimumOSVersion"))
+          privacy = sorted(k for k in info if k.endswith("UsageDescription"))
+          print("IPA privacy UsageDescription keys:", ", ".join(privacy) if privacy else "(none)")
+          bundles = [app, *app.rglob("*.appex")]
+          ids = []
+          for bundle in bundles:
+              p = plistlib.loads((bundle / "Info.plist").read_bytes())
+              bid = p.get("CFBundleIdentifier")
+              if bid:
+                  ids.append(bid)
+          assert len(ids) == len(set(ids)), f"duplicate app/extension identifiers: {ids}"
+          assert all(x == ids[0] or x.startswith(ids[0] + ".") for x in ids), ids
+          for entitlements in app.rglob("archived-expanded-entitlements.xcent"):
+              ent = plistlib.loads(entitlements.read_bytes())
+              assert "com.apple.developer.healthkit" not in ent, "HealthKit entitlement remains in IPA"
+          print("IPA extension bundle IDs:", ", ".join(ids[1:]) if len(ids) > 1 else "(none)")
+          print("IPA structure and bundle identifiers valid; HealthKit entitlement absent.")
+          PY
           test -d "$app/PlugIns/JITEnabler.appex"
           /usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$app/PlugIns/JITEnabler.appex/Info.plist"
           echo "Built Manic EMU v2.0.2 from $UPSTREAM_COMMIT without signing. This does not establish Feather signing or device installation."
@@ -69,7 +107,7 @@ jobs:
     steps:
       - name: Check out official source
         run: |
-          git clone --depth 1 --branch dev https://github.com/bryanthaboi/gen1recomp.git "$RUNNER_TEMP/gen1recomp"
+          git clone --depth 1 --branch v0.4.1 https://github.com/bryanthaboi/gen1recomp.git "$RUNNER_TEMP/gen1recomp"
           cd "$RUNNER_TEMP/gen1recomp"
           echo "UPSTREAM_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - name: Fetch the upstream LÖVE/iOS dependencies
@@ -96,7 +134,7 @@ jobs:
           GEN1_BUNDLE_ID: com.theboisclub.gen1recompplusplus
         run: |
           cd "$RUNNER_TEMP/gen1recomp"
-          scripts/build_ios.sh --device --release --ipa --version 0.4.0
+          scripts/build_ios.sh --device --release --ipa --version 0.4.1
           app="$RUNNER_TEMP/gen1recomp/dist/ios/Release-iphoneos/gen1recomp++.app"
           test -d "$app"
           /usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$app/Info.plist"
@@ -105,4 +143,4 @@ jobs:
             echo 'HealthKit entitlement unexpectedly remains' >&2
             exit 1
           fi
-          echo "Built Gen1Recomp v0.4.0 from $UPSTREAM_COMMIT without signing, using the upstream GEN1_DISABLE_HEALTHKIT option. The Pokéwalker step bridge remains compiled; it will not work without HealthKit. No app/game data is distributed."
+          echo "Built Gen1Recomp v0.4.1 from $UPSTREAM_COMMIT without signing, using the upstream GEN1_DISABLE_HEALTHKIT option. The Pokéwalker step bridge remains compiled; it will not work without HealthKit. No app/game data is distributed."
