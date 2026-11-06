@@ -9,37 +9,34 @@ https://raw.githubusercontent.com/t2wmt6sgff-glitch/Alejandro_App_Source/main/so
 
 - **PPSSPP 1.20.4**: IPA oficial enlazado directamente desde el release del proyecto. El procesamiento comprobó el Bundle ID, metadatos, tamaño, estructura, firma oficial y permisos. No se ha probado su instalación en un iPad con iPadOS 26.
 - **Spotify 9.1.92**: entrada ya presente en la fuente. Esta revisión no ha auditado el IPA ni sus condiciones; se ha dejado intacta.
-- **Manic EMU** y **Gen1Recomp**: no se ofrecen como instalables desde esta fuente. Sus compilaciones personalizadas siguen pendientes de firma compatible y prueba en dispositivo.
+- **Gen1Recomp 0.4.1**: IPA oficial del release upstream enlazado directamente. Se inspeccionó el IPA de la ejecución oficial de GitHub Actions: Bundle ID, versión/build, compatibilidad con iPad, mínimo de iOS, permisos firmados y privacidad. Requiere HealthKit y declara `get-task-allow`; la instalación dependerá de que el certificado/perfil utilizado permita ese entitlement. No se ha probado en el iPad de destino.
+- **Manic EMU**: se instala añadiendo su fuente oficial por separado: [https://apps.manicemu.site/altstore](https://apps.manicemu.site/altstore). No duplicamos su IPA ni sus metadatos aquí para que las actualizaciones sigan bajo control del equipo de Manic EMU.
 
 No hay ROMs ni datos de juegos en este repositorio. Utiliza copias de juegos obtenidas legalmente.
 
-## Manic EMU
-
-El proyecto oficial permite configurar o retirar App Groups, compras integradas e iCloud al compilar. El esquema oficial ManicEmuSideload ya excluye las compras y la interfaz de sincronización iCloud; BitBop usa una hoja de compartir cuando no dispone de su grupo compartido.
-
-El IPA oficial declara capacidades adicionales, entre ellas App Groups, iCloud y otras capacidades de ejecución. No basta con borrar sus entitlements del IPA oficial: hay que compilar el esquema sideload y comprobar la aplicación resultante. El workflow de auditoría usa Xcode 26 en macOS y el mínimo de iOS 15 del proyecto.
-
-La integración R.swift está como plugin de compilación de Swift Package Manager. Xcode exige aprobar ese plugin; su documentación propone desactivar la validación de huella para CI. Este repositorio no aplica ese ajuste porque omite un control de seguridad. Una prueba anterior que sí lo omitió llegó a fallar compilando una dependencia de dispositivos que declara iOS 12 aunque usa APIs de iOS 13. No se ha producido un IPA personalizado válido con las comprobaciones conservadas, ni se ha firmado o instalado Manic EMU con Feather.
-
-Manic EMU está bajo AGPL-3.0: cualquier distribución de una modificación requiere ofrecer el código fuente correspondiente y conservar avisos y licencia.
-
 ## Gen1Recomp
 
-Se verificó una compilación sin firma de la versión oficial **0.4.1** en GitHub Actions, desde el commit 12a2df8332f570194f98e5599ee54079a1771016, con GEN1_DISABLE_HEALTHKIT=1.
+La entrada utiliza el IPA oficial **0.4.1** publicado por el proyecto, no la compilación personalizada sin firma que se generó en la auditoría anterior.
 
-Resultados de esa compilación:
+- Bundle ID: `com.theboisclub.gen1recompplusplus`.
+- Versión/build: `0.4.1 / 401`.
+- Mínimo de iOS: `15.0`.
+- Tamaño: 44.734.536 bytes.
+- SHA-256 oficial: `5de10fab829699f3037112783874cd855c15201519dce7ffcea66c66c5190f50`.
+- Entitlements de la app: `com.apple.developer.healthkit` y `get-task-allow`.
+- Privacidad: `NSHealthShareUsageDescription`, con el texto incluido por el desarrollador.
 
-- IPA creado y ZIP íntegro; tamaño aproximado: 36 MB.
-- Bundle ID: com.theboisclub.gen1recompplusplus.
-- Versión/build: 0.4.1 / 401.
-- Mínimo de iOS: 15.0.
-- Sin extensiones incluidas.
-- La compilación usó CODE_SIGN_ENTITLEMENTS vacío; se generó sin firma y sin entitlement HealthKit.
-- NSHealthShareUsageDescription permanece en el Info.plist y el puente nativo de pasos permanece compilado. El ajuste oficial elimina la capacidad de firma, pero no elimina por completo el puente ni su texto de privacidad. El juego principal pudo compilar; no se ejecutó en un dispositivo ni se comprobó qué hace el mod Pokéwalker sin HealthKit.
+El IPA se obtuvo del artefacto de la ejecución oficial de GitHub Actions y se inspeccionaron su `Info.plist`, el perfil integrado y los entitlements de la firma Mach-O. El perfil declara HealthKit y el binario firmado contiene el entitlement HealthKit. Por tanto, el certificado/perfil con el que se vuelva a firmar debe ser compatible con HealthKit. Feather puede rechazar la instalación si el certificado no admite esa capacidad; no se ha probado con el certificado que se utilizará ni en el iPad de destino.
 
-El IPA no se publicó ni se adjuntó como artefacto. La licencia del proyecto permite redistribuir su código GPL con atribución, pero excluye expresamente el launcher propietario de las versiones modificadas. El IPA generado incluye ese launcher y no se puede publicar como variante modificada sin sustituirlo por uno propio conforme a la licencia o recibir permiso. El proyecto pide que cada usuario aporte sus archivos de juego; esta fuente no distribuye ROMs.
+La función Pokéwalker puede solicitar acceso a los pasos mediante HealthKit. Gen1Recomp no incluye ROMs: cada usuario debe importar su propia copia legal. La descarga apunta directamente al [release oficial v0.4.1](https://github.com/bryanthaboi/gen1recomp/releases/tag/v0.4.1).
 
-Una compilación correcta sin firma no demuestra que Feather pueda volver a firmar o instalar la app. El equipo disponible para esta revisión es Windows; no se dispuso de Xcode, un certificado/perfil verificable ni un iPad físico para probar la instalación.
+## Manic EMU
+
+Manic EMU se instalará desde la fuente oficial del desarrollador:
+
+**Fuente AltStore:** https://apps.manicemu.site/altstore
+
+Así evitamos mantener una copia de sus metadatos y enlaces de descarga en este catálogo. El equipo de Manic EMU controla las versiones y actualizaciones de su propia fuente. Su código es abierto bajo AGPL-3.0, pero no hace falta copiar ni compilar el proyecto para instalar la versión oficial.
 
 ## Añadir una aplicación
 
