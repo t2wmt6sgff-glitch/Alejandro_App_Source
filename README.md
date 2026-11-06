@@ -34,12 +34,12 @@ Resultados de esa compilación:
 - Versión/build: 0.4.1 / 401.
 - Mínimo de iOS: 15.0.
 - Sin extensiones incluidas.
-- HealthKit no aparece en los entitlements de la configuración sin firma.
+- La compilación usó CODE_SIGN_ENTITLEMENTS vacío; se generó sin firma y sin entitlement HealthKit.
 - NSHealthShareUsageDescription permanece en el Info.plist y el puente nativo de pasos permanece compilado. El ajuste oficial elimina la capacidad de firma, pero no elimina por completo el puente ni su texto de privacidad. El juego principal pudo compilar; no se ejecutó en un dispositivo ni se comprobó qué hace el mod Pokéwalker sin HealthKit.
 
 El IPA no se publicó ni se adjuntó como artefacto. La licencia del proyecto permite redistribuir su código GPL con atribución, pero excluye expresamente el launcher propietario de las versiones modificadas. El IPA generado incluye ese launcher y no se puede publicar como variante modificada sin sustituirlo por uno propio conforme a la licencia o recibir permiso. El proyecto pide que cada usuario aporte sus archivos de juego; esta fuente no distribuye ROMs.
 
-Una compilación correcta sin firma no demuestra que Feather pueda volver a firmar o instalar la app. Este equipo Windows no dispone de Xcode ni muestra un iPad conectado. No hay certificado Apple ni perfil disponible para estas pruebas.
+Una compilación correcta sin firma no demuestra que Feather pueda volver a firmar o instalar la app. El equipo disponible para esta revisión es Windows; no se dispuso de Xcode, un certificado/perfil verificable ni un iPad físico para probar la instalación.
 
 ## Añadir una aplicación
 
