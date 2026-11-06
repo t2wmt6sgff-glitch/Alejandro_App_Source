@@ -1,11 +1,12 @@
 {
   "name": "Apps de EL ALE :)",
   "subtitle": "Aplicaciones utiles para leo",
-  "description": "Aqui puedes instalar spoti, yt y emuladores subidos por mi",
+  "description": "Aqui puedes instalar aplicaciones y emuladores. Gen1Recomp y PPSSPP se ofrecen desde esta fuente; Manic EMU se instala desde su fuente oficial: https://apps.manicemu.site/altstore",
   "iconURL": "https://raw.githubusercontent.com/t2wmt6sgff-glitch/Alejandro_App_Source/main/assets/source-icon.jpg",
   "tintColor": "#31563B",
   "featuredApps": [
-    "org.ppsspp.ppsspp"
+    "org.ppsspp.ppsspp",
+    "com.theboisclub.gen1recompplusplus"
   ],
   "apps": [
     {
@@ -91,6 +92,35 @@
           "date": "2026-11-06",
           "downloadURL": "https://github.com/t2wmt6sgff-glitch/Alejandro_App_Source/releases/download/spoti-1.0/Spotify-9.1.92-Eevee-Pixie-v1.3.ipa",
           "size": 147719314,
+          "minOSVersion": "15.0"
+        }
+      ]
+    },
+    {
+      "name": "Gen1Recomp",
+      "bundleIdentifier": "com.theboisclub.gen1recompplusplus",
+      "developerName": "Boi's Club Games",
+      "subtitle": "Recompilación nativa de Pokémon para iOS.",
+      "localizedDescription": "Gen1Recomp permite importar y jugar copias propias de juegos Pokémon compatibles. No incluye ROMs. Esta versión oficial utiliza HealthKit para la función Pokéwalker: iOS puede solicitar permiso para leer los pasos.",
+      "iconURL": "https://raw.githubusercontent.com/bryanthaboi/gen1recomp/12a2df8332f570194f98e5599ee54079a1771016/mobile/android/love/src/jni/love/platform/xcode/Images.xcassets/iOS%20AppIcon.appiconset/icon-1024pt%401x.png",
+      "tintColor": "#D94A43",
+      "category": "games",
+      "appPermissions": {
+        "entitlements": [
+          "com.apple.developer.healthkit",
+          "get-task-allow"
+        ],
+        "privacy": {
+          "NSHealthShareUsageDescription": "The Pokéwalker mod reads your step count to give your Pokémon party experience points for real-world walking."
+        }
+      },
+      "versions": [
+        {
+          "version": "0.4.1",
+          "buildVersion": "401",
+          "date": "2026-11-06",
+          "downloadURL": "https://github.com/bryanthaboi/gen1recomp/releases/download/v0.4.1/gen1recomp%2B%2B-0.4.1-ios.ipa",
+          "size": 44734536,
           "minOSVersion": "15.0"
         }
       ]
