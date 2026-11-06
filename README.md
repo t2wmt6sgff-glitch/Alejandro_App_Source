@@ -1,68 +1,78 @@
 # Apps de EL ALE :)
 
-Catálogo personal en español para Feather, con aplicaciones verificadas y enlaces a sus publicaciones oficiales.
+Catálogo personal de aplicaciones para Feather.
 
-**Añade la fuente a Feather:**
+**Fuente:**  
 https://raw.githubusercontent.com/t2wmt6sgff-glitch/Alejandro_App_Source/main/source.json
 
-## Aplicación disponible
+## Estado del catálogo
 
-| Aplicación | Versión | Para qué sirve |
-|---|---:|---|
-| [PPSSPP](https://github.com/hrydgard/ppsspp) | 1.20.4 | Emulador de PlayStation Portable con ajustes gráficos y controles configurables. No necesita BIOS ni incluye juegos. |
+- **PPSSPP 1.20.4**: IPA oficial enlazado directamente desde el release del proyecto. El procesamiento comprobó el Bundle ID, metadatos, tamaño, estructura, firma oficial y permisos. No se ha probado su instalación en un iPad con iPadOS 26.
+- **Spotify 9.1.92**: entrada ya presente en la fuente. Esta revisión no ha auditado el IPA ni sus condiciones; se ha dejado intacta.
+- **Manic EMU** y **Gen1Recomp**: no se ofrecen como instalables desde esta fuente. Sus compilaciones personalizadas siguen pendientes de firma compatible y prueba en dispositivo.
 
-El IPA de PPSSPP procede del release oficial v1.20.4. Se comprobaron el Bundle ID, la versión, el número de compilación, el requisito mínimo de iOS, el soporte declarado para iPad, el tamaño, la integridad ZIP, los entitlements firmados y las claves de privacidad. La última versión oficial consultada sigue siendo 1.20.4. No se ha probado su ejecución en un iPad con iPadOS 26.
+No hay ROMs ni datos de juegos en este repositorio. Utiliza copias de juegos obtenidas legalmente.
 
-La descripción completa y los permisos técnicos se muestran en la fuente. El catálogo enlaza directamente al IPA oficial; este repositorio no vuelve a alojarlo. Utiliza únicamente copias de juegos obtenidas legalmente.
+## Manic EMU
 
-## Sobre otras aplicaciones investigadas
+El proyecto oficial permite configurar o retirar App Groups, compras integradas e iCloud al compilar. El esquema oficial ManicEmuSideload ya excluye las compras y la interfaz de sincronización iCloud; BitBop usa una hoja de compartir cuando no dispone de su grupo compartido.
 
-**Manic EMU 2.0.2** tiene un IPA oficial, pero no está publicado aquí como instalable. El IPA declara App Groups, contenedores y servicios iCloud, además de capacidades de ejecución y kernel. El proyecto indica que App Groups e iCloud deben configurarse para la cuenta que construye la aplicación o quitarse antes de compilarla. Una firma normal de Feather no puede garantizar esos identificadores y servicios. No se deben borrar capacidades del IPA sin verificar el resultado. La alternativa legítima es usar la distribución oficial o disponer de la cuenta de desarrollador y las capacidades correspondientes; no se ha verificado una instalación con Feather.
+El IPA oficial declara capacidades adicionales, entre ellas App Groups, iCloud y otras capacidades de ejecución. No basta con borrar sus entitlements del IPA oficial: hay que compilar el esquema sideload y comprobar la aplicación resultante. El workflow de auditoría usa Xcode 26 en macOS y el mínimo de iOS 15 del proyecto.
 
-**Gen1Recomp 0.4.0** también publica un IPA oficial para iOS, pero no está publicado aquí como instalable. El IPA verificado declara HealthKit. El proyecto utiliza esa capacidad para contar pasos en iOS; una firma personal puede no autorizarla y no se ha comprobado en Feather qué ocurre al volver a firmar. No se ha alterado el IPA ni se ha retirado la capacidad. El uso requiere que cada persona aporte su propio archivo de juego legal; este repositorio no contiene ROMs. La publicación oficial tiene condiciones de licencia adicionales para su launcher, por lo que esta fuente enlaza —y no vuelve a distribuir— el archivo oficial.
+La integración R.swift está como plugin de compilación de Swift Package Manager. Xcode exige aprobar ese plugin; su documentación propone desactivar la validación de huella para CI. Este repositorio no aplica ese ajuste porque omite un control de seguridad. Una prueba anterior que sí lo omitió llegó a fallar compilando una dependencia de dispositivos que declara iOS 12 aunque usa APIs de iOS 13. No se ha producido un IPA personalizado válido con las comprobaciones conservadas, ni se ha firmado o instalado Manic EMU con Feather.
 
-La presencia de un IPA en un release no prueba por sí sola que Feather pueda instalarlo. No se ha realizado una instalación en un dispositivo para estas candidatas.
+Manic EMU está bajo AGPL-3.0: cualquier distribución de una modificación requiere ofrecer el código fuente correspondiente y conservar avisos y licencia.
 
-## Añadir o actualizar una aplicación desde GitHub
+## Gen1Recomp
 
-Este proceso utiliza un Release de GitHub. El archivo IPA se guarda como activo del Release, no en el historial normal de archivos.
+Se verificó una compilación sin firma de la versión oficial **0.4.1** en GitHub Actions, desde el commit 12a2df8332f570194f98e5599ee54079a1771016, con GEN1_DISABLE_HEALTHKIT=1.
 
-1. Abre **Releases** en este repositorio y pulsa **Draft a new release**.
-2. Crea una etiqueta nueva y única. Para una actualización o un cambio de descripción usa otra etiqueta, por ejemplo 'mi-app-1.2'.
-3. Escribe en el título el nombre que quieres mostrar en Feather.
-4. Escribe la descripción en español en el texto del Release.
-5. Adjunta un único archivo .ipa y pulsa **Publish release**.
-6. GitHub Actions comprobará el archivo automáticamente. Si todo pasa, añadirá la app o actualizará la entrada que tenga el mismo Bundle ID. Si algo falla, no se cambia el catálogo; abre **Actions** y consulta el resumen del error.
+Resultados de esa compilación:
 
-No incluyas certificados, perfiles de aprovisionamiento, contraseñas ni ROMs. Publica únicamente archivos cuya distribución esté autorizada. El nombre y la descripción que escribas en el Release serán los que aparezcan en la fuente; para cambiar solo esos textos sin volver a subir el IPA, abre **Actions → Edit app name and description → Run workflow** y rellena el formulario.
+- IPA creado y ZIP íntegro; tamaño aproximado: 36 MB.
+- Bundle ID: com.theboisclub.gen1recompplusplus.
+- Versión/build: 0.4.1 / 401.
+- Mínimo de iOS: 15.0.
+- Sin extensiones incluidas.
+- HealthKit no aparece en los entitlements de la configuración sin firma.
+- NSHealthShareUsageDescription permanece en el Info.plist y el puente nativo de pasos permanece compilado. El ajuste oficial elimina la capacidad de firma, pero no elimina por completo el puente ni su texto de privacidad. El juego principal pudo compilar; no se ejecutó en un dispositivo ni se comprobó qué hace el mod Pokéwalker sin HealthKit.
 
-El procesamiento se ejecuta en macOS. Comprueba la integridad del ZIP, que haya una sola app principal, la firma de la app y sus extensiones, sus entitlements, todas las claves de privacidad *UsageDescription, el icono, el Bundle ID, la versión, el build, la versión mínima de iOS y el soporte declarado para iPad. Rechaza identificadores duplicados, datos incompatibles, archivos dañados y permisos contradictorios. Solo escribe el catálogo tras superar todas las comprobaciones.
+El IPA no se publicó ni se adjuntó como artefacto. La licencia del proyecto permite redistribuir su código GPL con atribución, pero excluye expresamente el launcher propietario de las versiones modificadas. El IPA generado incluye ese launcher y no se puede publicar como variante modificada sin sustituirlo por uno propio conforme a la licencia o recibir permiso. El proyecto pide que cada usuario aporte sus archivos de juego; esta fuente no distribuye ROMs.
 
-## Actualizaciones
+Una compilación correcta sin firma no demuestra que Feather pueda volver a firmar o instalar la app. Este equipo Windows no dispone de Xcode ni muestra un iPad conectado. No hay certificado Apple ni perfil disponible para estas pruebas.
 
-La comprobación semanal consulta releases oficiales de las aplicaciones monitorizadas que están en el catálogo. En este momento solo monitoriza PPSSPP. La revisión no publica cambios por sí sola. Para publicar una actualización verificada, abre **Actions → Check official app updates → Run workflow** y marca **Publish update**. Se comprueban el IPA oficial, su firma, Bundle ID, soporte para iPad, versión, tamaño y permisos. El flujo impide reemplazar una versión del catálogo por otra numéricamente más antigua.
+## Añadir una aplicación
 
-La fuente no actualiza automáticamente las apps ya instaladas en Feather; muestra los metadatos y la versión que Feather puede consultar.
+1. En este repositorio, abre **Releases → Draft a new release**.
+2. Elige una etiqueta única.
+3. Escribe el nombre que quieras mostrar en el título del Release.
+4. Escribe la descripción en español en el cuerpo.
+5. Adjunta un único archivo .ipa cuya distribución esté autorizada.
+6. Pulsa **Publish release**.
 
-## Pruebas de compilación personalizadas para iOS
+GitHub Actions valida el IPA en macOS y solo actualiza source.json si todas las comprobaciones pasan. Si el Bundle ID ya existe, actualiza esa aplicación en lugar de crear otra entrada. Si una validación falla, el catálogo no se modifica; abre **Actions** para consultar el error.
 
-La acción **Audit custom iOS build feasibility** permite probar, en un runner macOS de GitHub, los proyectos oficiales de Manic EMU o Gen1Recomp sin cargar certificados ni publicar archivos. En **Actions**, selecciónala, pulsa **Run workflow** y elige el proyecto. Un resultado correcto solo acredita que el código fuente pudo compilar en ese entorno; no acredita la firma con tu cuenta, la instalación desde Feather ni el funcionamiento en un iPad.
+Para cambiar solo el nombre o la descripción, abre **Actions → Edit app name and description → Run workflow** y completa el formulario. No hace falta subir otro IPA ni editar JSON.
 
-En Manic EMU se prueba el esquema oficial `ManicEmuSideload`, que ya excluye las compras integradas y la interfaz de sincronización iCloud. La compilación de prueba omite el archivo de entitlements completo para no solicitar App Groups, iCloud, notificaciones push ni los entitlements especiales de kernel/ejecución. La integración opcional con BitBop pierde el acceso al contenedor compartido; el propio código sideload cambia a la hoja de compartir. Los entitlements especiales no se han eliminado del IPA oficial ni se afirma que todas las funciones/JIT mantengan el mismo rendimiento. Solo tras una compilación, revisión de permisos y prueba real de firma e instalación se incorporará una versión personalizada. Manic EMU está bajo AGPL-3.0: una distribución modificada exige ofrecer el código fuente correspondiente y conservar sus avisos.
+No subas certificados, perfiles de aprovisionamiento, contraseñas ni ROMs. Feather no actualiza silenciosamente las apps instaladas: la fuente expone versiones y metadatos para que el usuario decida qué instalar.
 
-En Gen1Recomp la acción usa el ajuste oficial `GEN1_DISABLE_HEALTHKIT=1`. La capacidad solo sirve al puente de pasos de Pokéwalker; el juego principal no depende de él. En esa configuración la pantalla del juego/mod que consulta pasos no podrá recibirlos. El workflow no distribuye el IPA. La licencia de Gen1Recomp incluye condiciones especiales sobre su launcher y no permite redistribuir una compilación modificada/fork; por eso no se publicará una variante personalizada en esta fuente sin autorización expresa del titular.
+## Auditorías de compilación
 
-Actualmente este ordenador no tiene Xcode, un certificado de firma de Apple ni un iPad conectado. Por ello, las compilaciones de GitHub Actions son pruebas sin firma. La firma final con el certificado y el perfil concretos y la instalación en Feather quedan pendientes; no se deben interpretar como verificadas.
+En **Actions → Audit custom iOS build feasibility → Run workflow** puedes elegir Manic EMU o Gen1Recomp. La acción compila en un runner macOS, sin certificado y sin publicar artefactos. No demuestra la firma con tu cuenta, la instalación desde Feather ni el funcionamiento en iPadOS 26.
 
-## Identidad visual
+La comprobación semanal de versiones revisa las aplicaciones que están en el catálogo y no publica actualizaciones por sí sola. Delta no figura en el catálogo ni en los monitores activos.
 
-El icono de la fuente utiliza la imagen adjunta, conservada en JPEG cuadrado de 447 × 447 píxeles. El color verde de acento se eligió para armonizar con la imagen. No se ha añadido un encabezado ni capturas: no hay capturas oficiales de iPad verificadas para esta selección.
+## Icono
+
+La fuente usa la imagen adjunta, conservada como JPEG cuadrado de 447 × 447 píxeles:  
+https://raw.githubusercontent.com/t2wmt6sgff-glitch/Alejandro_App_Source/main/assets/source-icon.jpg
 
 ## Referencias oficiales
 
 - [Formato de fuentes de AltStore Classic](https://faq.altstore.io/developers/make-a-source)
 - [Feather](https://feather.claration.dev/)
-- [Release de PPSSPP 1.20.4](https://github.com/hrydgard/ppsspp/releases/tag/v1.20.4)
-- [Release de Manic EMU 2.0.2](https://github.com/Manic-EMU/ManicEMU/releases/tag/v2.0.2)
-- [Release de Gen1Recomp 0.4.0](https://github.com/bryanthaboi/gen1recomp/releases/tag/v0.4.0)
-- [Condiciones de licencia de Gen1Recomp](https://github.com/bryanthaboi/gen1recomp/blob/dev/LICENSE.MD)
+- [PPSSPP 1.20.4](https://github.com/hrydgard/ppsspp/releases/tag/v1.20.4)
+- [Manic EMU](https://github.com/Manic-EMU/ManicEMU)
+- [Gen1Recomp v0.4.1](https://github.com/bryanthaboi/gen1recomp/releases/tag/v0.4.1)
+- [Licencia y condiciones adicionales de Gen1Recomp](https://github.com/bryanthaboi/gen1recomp/blob/dev/LICENSE.MD)
+- [R.swift: plugins y aprobación en Xcode](https://github.com/mac-cain13/R.swift)
