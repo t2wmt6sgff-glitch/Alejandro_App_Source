@@ -1,12 +1,13 @@
 {
   "name": "Apps de EL ALE :)",
   "subtitle": "Aplicaciones utiles para leo",
-  "description": "Aqui puedes instalar aplicaciones y emuladores. Gen1Recomp y PPSSPP se ofrecen desde esta fuente; Manic EMU se instala desde su fuente oficial: https://apps.manicemu.site/altstore",
+  "description": "Aquí puedes instalar aplicaciones y emuladores. Gen1Recomp, iCube y PPSSPP se ofrecen desde esta fuente; Manic EMU se instala desde su fuente oficial: https://apps.manicemu.site/altstore",
   "iconURL": "https://raw.githubusercontent.com/t2wmt6sgff-glitch/Alejandro_App_Source/main/assets/source-icon.jpg",
   "tintColor": "#31563B",
   "featuredApps": [
     "org.ppsspp.ppsspp",
-    "com.theboisclub.gen1recompplusplus"
+    "com.theboisclub.gen1recompplusplus",
+    "com.joemattiello.iCube"
   ],
   "apps": [
     {
@@ -122,6 +123,27 @@
           "downloadURL": "https://github.com/bryanthaboi/gen1recomp/releases/download/v0.4.1/gen1recomp%2B%2B-0.4.1-ios.ipa",
           "size": 44734536,
           "minOSVersion": "15.0"
+        }
+      ]
+    },
+    {
+      "name": "iCube",
+      "bundleIdentifier": "com.joemattiello.iCube",
+      "developerName": "Provenance Emu",
+      "subtitle": "Emulador de GameCube y Wii para iPhone y iPad.",
+      "localizedDescription": "Emulador de Nintendo GameCube y Wii para iOS/iPadOS, basado en Dolphin. Incluye gestión de biblioteca, guardados, controles táctiles y compatibilidad con mandos. No incluye juegos. Esta entrada utiliza la compilación alpha 458 oficial; puede contener errores.",
+      "iconURL": "https://icube-emu.com/icon-1024.png",
+      "tintColor": "#3B82F6",
+      "category": "games",
+      "versions": [
+        {
+          "version": "1.0.0",
+          "buildVersion": "458",
+          "date": "2026-11-05",
+          "localizedDescription": "Compilación alpha 458 oficial de iCube, publicada el 5 de noviembre de 2026. Versión de prueba.",
+          "downloadURL": "https://github.com/Provenance-Emu/iCube/releases/download/alpha-458/Non-Jailbroken.ipa",
+          "size": 104593144,
+          "minOSVersion": "17.0"
         }
       ]
     }
