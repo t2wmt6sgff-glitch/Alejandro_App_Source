@@ -107,7 +107,7 @@
       "developerName": "Boi's Club Games",
       "subtitle": "Recompilación nativa de Pokémon para iOS.",
       "localizedDescription": "Gen1Recomp permite importar y jugar copias propias de juegos Pokémon compatibles. No incluye ROMs. Esta versión oficial utiliza HealthKit para la función Pokéwalker: iOS puede solicitar permiso para leer los pasos.",
-      "iconURL": "https://raw.githubusercontent.com/bryanthaboi/gen1recomp/12a2df8332f570194f98e5599ee54079a1771016/mobile/android/love/src/jni/love/platform/xcode/Images.xcassets/iOS%20AppIcon.appiconset/icon-1024pt%401x.png",
+      "iconURL": "https://raw.githubusercontent.com/t2wmt6sgff-glitch/Alejandro_App_Source/main/icons/com.theboisclub.gen1recompplusplus.jpeg",
       "tintColor": "#D94A43",
       "category": "games",
       "appPermissions": {
