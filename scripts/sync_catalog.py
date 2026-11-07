@@ -78,7 +78,8 @@ def github_candidate(bundle, config, temp):
     tag = str(data.get("tag_name", "")).removeprefix("v")
     if not url.startswith("https://github.com/") or not isinstance(size, int) or size <= 0 or not tag:
         raise ValueError("Metadatos del release de GitHub incompletos.")
-    report = inspect(config["repo"], url, temp / re.sub(r"[^A-Za-z0-9]+", "_", bundle))
+    safe_name = re.sub(r"[^A-Za-z0-9]+", "_", bundle)
+    report = inspect(safe_name, url, temp / safe_name)
     if report.get("bundleIdentifier") != bundle:
         raise ValueError(f"Bundle ID inesperado: {report.get('bundleIdentifier')!r}.")
     if not report.get("supportsIpadFamily"):
