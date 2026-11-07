@@ -10,9 +10,23 @@ https://raw.githubusercontent.com/t2wmt6sgff-glitch/Alejandro_App_Source/main/so
 - **PPSSPP 1.20.4**: IPA oficial enlazado directamente desde el release del proyecto. El procesamiento comprobó el Bundle ID, metadatos, tamaño, estructura, firma oficial y permisos. No se ha probado su instalación en un iPad con iPadOS 26.
 - **Spotify 9.1.92**: entrada ya presente en la fuente. Esta revisión no ha auditado el IPA ni sus condiciones; se ha dejado intacta.
 - **Gen1Recomp 0.4.1**: IPA oficial del release upstream enlazado directamente. Se inspeccionó el IPA de la ejecución oficial de GitHub Actions: Bundle ID, versión/build, compatibilidad con iPad, mínimo de iOS, permisos firmados y privacidad. Requiere HealthKit y declara `get-task-allow`; la instalación dependerá de que el certificado/perfil utilizado permita ese entitlement. No se ha probado en el iPad de destino.
+- **iCube 1.0.0 (build 458)**: compilación alpha oficial de iCube, publicada el 5 de noviembre de 2026. La descarga apunta al release inmutable `alpha-458` de Provenance-Emu. Es una versión de prueba y puede contener errores. Se ha copiado únicamente la entrada de iCube, no el catálogo completo de Provenance.
 - **Manic EMU**: se instala añadiendo su fuente oficial por separado: [https://apps.manicemu.site/altstore](https://apps.manicemu.site/altstore). No duplicamos su IPA ni sus metadatos aquí para que las actualizaciones sigan bajo control del equipo de Manic EMU.
 
 No hay ROMs ni datos de juegos en este repositorio. Utiliza copias de juegos obtenidas legalmente.
+
+## iCube
+
+La entrada utiliza la compilación **alpha 458** publicada por el proyecto el 5 de noviembre de 2026.
+
+- Bundle ID: `com.joemattiello.iCube`.
+- Versión/build: `1.0.0 / 458`.
+- Mínimo de iOS declarado por el feed oficial: `17.0`.
+- Tamaño del IPA: 104.593.144 bytes.
+- Descarga: [release oficial alpha-458](https://github.com/Provenance-Emu/iCube/releases/tag/alpha-458).
+- Fuente oficial: [https://icube-emu.com/api/altstore](https://icube-emu.com/api/altstore).
+
+Se ha copiado únicamente la ficha de iCube a este catálogo para reunirla con las demás aplicaciones. La fuente oficial de iCube sigue siendo la referencia para futuras versiones: esta ficha personal no se actualiza automáticamente cuando el desarrollador publica otra compilación. La alpha es una versión de prueba. iCube emula GameCube y Wii y no incluye juegos; importa únicamente copias propias.
 
 ## Gen1Recomp
 
@@ -71,5 +85,6 @@ https://raw.githubusercontent.com/t2wmt6sgff-glitch/Alejandro_App_Source/main/as
 - [PPSSPP 1.20.4](https://github.com/hrydgard/ppsspp/releases/tag/v1.20.4)
 - [Manic EMU](https://github.com/Manic-EMU/ManicEMU)
 - [Gen1Recomp v0.4.1](https://github.com/bryanthaboi/gen1recomp/releases/tag/v0.4.1)
+- [iCube alpha 458](https://github.com/Provenance-Emu/iCube/releases/tag/alpha-458)
 - [Licencia y condiciones adicionales de Gen1Recomp](https://github.com/bryanthaboi/gen1recomp/blob/dev/LICENSE.MD)
 - [R.swift: plugins y aprobación en Xcode](https://github.com/mac-cain13/R.swift)
