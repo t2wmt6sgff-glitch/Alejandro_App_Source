@@ -1,13 +1,14 @@
 {
   "name": "Apps de EL ALE :)",
   "subtitle": "Aplicaciones utiles para leo",
-  "description": "Aquí puedes instalar aplicaciones y emuladores. Gen1Recomp, iCube y PPSSPP se ofrecen desde esta fuente; Manic EMU se instala desde su fuente oficial: https://apps.manicemu.site/altstore",
+  "description": "Aquí puedes instalar aplicaciones y emuladores. Gen1Recomp, iCube, MeloCafe y PPSSPP se ofrecen desde esta fuente; Manic EMU se instala desde su fuente oficial: https://apps.manicemu.site/altstore",
   "iconURL": "https://raw.githubusercontent.com/t2wmt6sgff-glitch/Alejandro_App_Source/main/assets/source-icon.jpg",
   "tintColor": "#31563B",
   "featuredApps": [
     "org.ppsspp.ppsspp",
     "com.theboisclub.gen1recompplusplus",
-    "com.joemattiello.iCube"
+    "com.joemattiello.iCube",
+    "com.stossy11.MeloCafe"
   ],
   "apps": [
     {
@@ -144,6 +145,35 @@
           "downloadURL": "https://github.com/Provenance-Emu/iCube/releases/download/alpha-458/Non-Jailbroken.ipa",
           "size": 104593144,
           "minOSVersion": "17.0"
+        }
+      ]
+    },
+    {
+      "name": "MeloCafe",
+      "bundleIdentifier": "com.stossy11.MeloCafe",
+      "developerName": "Stossy11",
+      "subtitle": "Emulador de Nintendo Wii U basado en Cemu.",
+      "localizedDescription": "MeloCafe es un emulador de Nintendo Wii U para iPhone y iPad basado en Cemu. No incluye juegos; importa únicamente copias propias. Para el mejor rendimiento necesita el entitlement Increased Memory Limit. El uso de JIT requiere configurar el Universal Script en StikDebug.",
+      "iconURL": "https://raw.githubusercontent.com/stossy11/MeloCafe/247bd9e5ed05192eb4fee6162f1519b4aef0ffa1/MeloCafe/MeloCafe/Assets/Assets.xcassets/AppIcon.imageset/AppIcon.png",
+      "tintColor": "#6C8C75",
+      "category": "games",
+      "appPermissions": {
+        "entitlements": [
+          "com.apple.developer.kernel.increased-memory-limit"
+        ],
+        "privacy": {
+          "NSCameraUsageDescription": "MeloCafe uses the camera when Wii U software requests the GamePad camera.",
+          "NSMicrophoneUsageDescription": "MeloCafe uses the microphone when Wii U software requests GamePad microphone input."
+        }
+      },
+      "versions": [
+        {
+          "version": "1.1",
+          "buildVersion": "3",
+          "date": "2026-10-31",
+          "downloadURL": "https://github.com/stossy11/MeloCafe/releases/download/1.1/MeloCafe.ipa",
+          "size": 23558287,
+          "minOSVersion": "15.0"
         }
       ]
     }
