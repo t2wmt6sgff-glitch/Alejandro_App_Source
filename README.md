@@ -10,11 +10,23 @@ https://raw.githubusercontent.com/t2wmt6sgff-glitch/Alejandro_App_Source/main/so
 - **PPSSPP 1.20.4**: IPA oficial enlazado directamente desde el release del proyecto. El procesamiento comprobó el Bundle ID, metadatos, tamaño, estructura, firma oficial y permisos. No se ha probado su instalación en un iPad con iPadOS 26.
 - **Spotify 9.1.92**: entrada ya presente en la fuente. Esta revisión no ha auditado el IPA ni sus condiciones; se ha dejado intacta.
 - **Gen1Recomp 0.4.1**: IPA oficial del release upstream enlazado directamente. Se inspeccionó el IPA de la ejecución oficial de GitHub Actions: Bundle ID, versión/build, compatibilidad con iPad, mínimo de iOS, permisos firmados y privacidad. Requiere HealthKit y declara `get-task-allow`; la instalación dependerá de que el certificado/perfil utilizado permita ese entitlement. No se ha probado en el iPad de destino.
-- **iCube 1.0.0 (build 458)**: compilación alpha oficial de iCube, publicada el 5 de noviembre de 2026. La descarga apunta al release inmutable `alpha-458` de Provenance-Emu. Es una versión de prueba y puede contener errores. Se ha copiado únicamente la entrada de iCube, no el catálogo completo de Provenance.
+- **iCube 1.0.0 (build 458)**: compilación alpha oficial de iCube, publicada el 5 de noviembre de 2026. La descarga apunta al release inmutable `alpha-458` de Provenance-Emu. La fuente declara Increased Memory Limit, Extended Virtual Addressing y `get-task-allow` como capacidades deseadas para la firma. Es una versión de prueba y puede contener errores. Se ha copiado únicamente la entrada de iCube, no el catálogo completo de Provenance.
 - **MeloCafe 1.1 (build 3)**: IPA oficial del release `1.1` de Stossy11. La fuente declara Increased Memory Limit, Extended Virtual Addressing y `get-task-allow` para el perfil de firma/JIT, además de los permisos de cámara y micrófono. La configuración upstream del tag solo declara Increased Memory Limit; el IPA binario no se pudo inspeccionar en esta revisión. Consulta la sección MeloCafe antes de resignar.
 - **Manic EMU**: se instala añadiendo su fuente oficial por separado: [https://apps.manicemu.site/altstore](https://apps.manicemu.site/altstore). No duplicamos su IPA ni sus metadatos aquí para que las actualizaciones sigan bajo control del equipo de Manic EMU.
 
 No hay ROMs ni datos de juegos en este repositorio. Utiliza copias de juegos obtenidas legalmente.
+
+## iCube
+
+La entrada utiliza la compilación alpha 458 oficial de Provenance-Emu.
+
+- Bundle ID: `com.joemattiello.iCube`.
+- Versión/build: `1.0.0 / 458`.
+- Mínimo de iOS declarado: `17.0`.
+- Entitlements añadidos a los metadatos de nuestra fuente: `com.apple.developer.kernel.increased-memory-limit`, `com.apple.developer.kernel.extended-virtual-addressing` y `get-task-allow`.
+- Descarga: [IPA oficial iCube alpha 458](https://github.com/Provenance-Emu/iCube/releases/download/alpha-458/Non-Jailbroken.ipa).
+
+**Alcance:** estos tres entitlements se han añadido como capacidades deseadas para la firma. No se ha verificado que estén incluidos en la firma del IPA oficial de iCube. Añadirlos a `source.json` no modifica el IPA: para que surtan efecto, el IPA debe firmarse con un perfil que los autorice. `get-task-allow` permite depuración y no aumenta por sí mismo el rendimiento.
 
 ## MeloCafe
 
