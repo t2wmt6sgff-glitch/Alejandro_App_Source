@@ -1,0 +1,45 @@
+name: Sync app updates
+
+on:
+  schedule:
+    - cron: '23 */6 * * *'
+  workflow_dispatch:
+    inputs:
+      publish_update:
+        description: Publicar las versiones verificadas en source.json
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-app-updates
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run catalog tests
+        run: python -m unittest discover -s tests -v
+      - name: Check upstream feeds and GitHub releases
+        id: sync
+        env:
+          PUBLISH_UPDATE: ${{ github.event_name == 'schedule' || inputs.publish_update }}
+        run: python scripts/sync_catalog.py
+      - name: Commit catalog updates
+        if: ${{ steps.sync.outputs.changed == 'true' }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add source.json
+          git commit -m "Sync verified app updates"
+          git push
