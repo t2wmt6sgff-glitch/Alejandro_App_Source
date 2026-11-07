@@ -132,7 +132,7 @@
       "bundleIdentifier": "com.joemattiello.iCube",
       "developerName": "Provenance Emu",
       "subtitle": "Emulador de GameCube y Wii para iPhone y iPad.",
-      "localizedDescription": "Emulador de Nintendo GameCube y Wii para iOS/iPadOS, basado en Dolphin. Incluye gestión de biblioteca, guardados, controles táctiles y compatibilidad con mandos. No incluye juegos. Esta entrada utiliza la compilación alpha 458 oficial; puede contener errores.",
+      "localizedDescription": "Emulador de Nintendo GameCube y Wii para iOS/iPadOS, basado en Dolphin. Incluye gestión de biblioteca, guardados, controles táctiles y compatibilidad con mandos. No incluye juegos. Esta entrada utiliza la compilación alpha 458 oficial; puede contener errores. La fuente declara Increased Memory Limit, Extended Virtual Addressing y get-task-allow como capacidades deseadas para la firma; deben estar autorizadas por el perfil de aprovisionamiento.",
       "iconURL": "https://icube-emu.com/icon-1024.png",
       "tintColor": "#3B82F6",
       "category": "games",
@@ -146,7 +146,14 @@
           "size": 104593144,
           "minOSVersion": "17.0"
         }
-      ]
+      ],
+      "appPermissions": {
+        "entitlements": [
+          "com.apple.developer.kernel.increased-memory-limit",
+          "com.apple.developer.kernel.extended-virtual-addressing",
+          "get-task-allow"
+        ]
+      }
     },
     {
       "name": "MeloCafe",
