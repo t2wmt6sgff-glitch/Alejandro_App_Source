@@ -11,9 +11,29 @@ https://raw.githubusercontent.com/t2wmt6sgff-glitch/Alejandro_App_Source/main/so
 - **Spotify 9.1.92**: entrada ya presente en la fuente. Esta revisión no ha auditado el IPA ni sus condiciones; se ha dejado intacta.
 - **Gen1Recomp 0.4.1**: IPA oficial del release upstream enlazado directamente. Se inspeccionó el IPA de la ejecución oficial de GitHub Actions: Bundle ID, versión/build, compatibilidad con iPad, mínimo de iOS, permisos firmados y privacidad. Requiere HealthKit y declara `get-task-allow`; la instalación dependerá de que el certificado/perfil utilizado permita ese entitlement. No se ha probado en el iPad de destino.
 - **iCube 1.0.0 (build 458)**: compilación alpha oficial de iCube, publicada el 5 de noviembre de 2026. La descarga apunta al release inmutable `alpha-458` de Provenance-Emu. Es una versión de prueba y puede contener errores. Se ha copiado únicamente la entrada de iCube, no el catálogo completo de Provenance.
+- **MeloCafe 1.1 (build 3)**: IPA oficial del release `1.1` de Stossy11. Los metadatos se contrastaron con la configuración del proyecto en ese tag y con el registro del asset publicado. La app declara el entitlement `com.apple.developer.kernel.increased-memory-limit` y permisos de cámara y micrófono. El IPA binario no se pudo descargar e inspeccionar de forma independiente en esta revisión; se documenta esa limitación en la sección MeloCafe.
 - **Manic EMU**: se instala añadiendo su fuente oficial por separado: [https://apps.manicemu.site/altstore](https://apps.manicemu.site/altstore). No duplicamos su IPA ni sus metadatos aquí para que las actualizaciones sigan bajo control del equipo de Manic EMU.
 
 No hay ROMs ni datos de juegos en este repositorio. Utiliza copias de juegos obtenidas legalmente.
+
+## MeloCafe
+
+La entrada apunta al IPA oficial publicado por Stossy11 en el release `1.1` del 31 de octubre de 2026.
+
+- Bundle ID: `com.stossy11.MeloCafe`.
+- Versión/build: `1.1 / 3`.
+- Mínimo de iOS de la app principal: `15.0`.
+- La extensión `MeloCafeRamDonor` tiene deployment target `26.0`; las funciones asociadas a esa extensión requieren iOS/iPadOS 26 o posterior.
+- Tamaño del IPA publicado: 23.558.287 bytes.
+- SHA-256 publicado por GitHub para el asset: `595c8c307206c789e607836e670a9290dbacc0c51a224934fd2fde002b190fce`.
+- Entitlement declarado por el target principal: `com.apple.developer.kernel.increased-memory-limit`.
+- Permisos de privacidad: `NSCameraUsageDescription` y `NSMicrophoneUsageDescription`.
+- Descarga: [IPA oficial MeloCafe 1.1](https://github.com/stossy11/MeloCafe/releases/download/1.1/MeloCafe.ipa).
+- Release: [stossy11/MeloCafe 1.1](https://github.com/stossy11/MeloCafe/releases/tag/1.1).
+
+**Alcance de la comprobación:** el Bundle ID, versión, build, deployment targets, entitlement y cadenas de privacidad se contrastaron con el proyecto Xcode del tag `1.1`; el tamaño, SHA-256, fecha y URL se contrastaron con los metadatos del asset de GitHub. En esta revisión no fue posible descargar y abrir el IPA binario para comparar su `Info.plist` y su firma con esos datos. Por eso no se afirma que los entitlements estén presentes en la firma distribuida, solo que están declarados en el proyecto. El certificado usado para volver a firmar debe admitir Increased Memory Limit para conservar esa capacidad.
+
+MeloCafe es un emulador de Wii U basado en Cemu. No incluye juegos; importa únicamente copias propias. El README oficial indica que para obtener el mejor rendimiento se necesita Increased Memory Limit y que hay que asignar el Universal Script en StikDebug para JIT. En iOS 26, la guía oficial recomienda StikDebug para activar JIT.
 
 ## iCube
 
@@ -86,5 +106,6 @@ https://raw.githubusercontent.com/t2wmt6sgff-glitch/Alejandro_App_Source/main/as
 - [Manic EMU](https://github.com/Manic-EMU/ManicEMU)
 - [Gen1Recomp v0.4.1](https://github.com/bryanthaboi/gen1recomp/releases/tag/v0.4.1)
 - [iCube alpha 458](https://github.com/Provenance-Emu/iCube/releases/tag/alpha-458)
+- [MeloCafe 1.1](https://github.com/stossy11/MeloCafe/releases/tag/1.1)
 - [Licencia y condiciones adicionales de Gen1Recomp](https://github.com/bryanthaboi/gen1recomp/blob/dev/LICENSE.MD)
 - [R.swift: plugins y aprobación en Xcode](https://github.com/mac-cain13/R.swift)
