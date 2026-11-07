@@ -1,7 +1,7 @@
 {
   "name": "Apps de EL ALE :)",
   "subtitle": "Aplicaciones utiles para leo",
-  "description": "Aquí puedes instalar aplicaciones y emuladores como Gen1Recomp, iCube, Manic EMU, MeloCafe y PPSSPP.",
+  "description": "Aquí puedes instalar aplicaciones y emuladores que he encontrado :)",
   "iconURL": "https://raw.githubusercontent.com/t2wmt6sgff-glitch/Alejandro_App_Source/main/assets/source-icon.jpg",
   "tintColor": "#31563B",
   "featuredApps": [
@@ -113,7 +113,9 @@
       "appPermissions": {
         "entitlements": [
           "com.apple.developer.healthkit",
-          "get-task-allow"
+          "get-task-allow",
+          "com.apple.developer.kernel.increased-memory-limit",
+          "com.apple.developer.kernel.extended-virtual-addressing"
         ],
         "privacy": {
           "NSHealthShareUsageDescription": "The Pokéwalker mod reads your step count to give your Pokémon party experience points for real-world walking."
