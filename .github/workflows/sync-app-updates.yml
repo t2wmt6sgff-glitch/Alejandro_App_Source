@@ -1,6 +1,11 @@
 name: Sync app updates
 
 on:
+  push:
+    paths:
+      - '.github/workflows/sync-app-updates.yml'
+      - 'scripts/sync_catalog.py'
+      - 'scripts/audit_official.py'
   schedule:
     - cron: '23 */6 * * *'
   workflow_dispatch:
