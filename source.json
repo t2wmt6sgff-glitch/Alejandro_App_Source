@@ -153,13 +153,15 @@
       "bundleIdentifier": "com.stossy11.MeloCafe",
       "developerName": "Stossy11",
       "subtitle": "Emulador de Nintendo Wii U basado en Cemu.",
-      "localizedDescription": "MeloCafe es un emulador de Nintendo Wii U para iPhone y iPad basado en Cemu. No incluye juegos; importa únicamente copias propias. Para el mejor rendimiento necesita el entitlement Increased Memory Limit. El uso de JIT requiere configurar el Universal Script en StikDebug.",
+      "localizedDescription": "MeloCafe es un emulador de Nintendo Wii U para iPhone y iPad basado en Cemu. No incluye juegos; importa únicamente copias propias. Para cargas grandes declara Increased Memory Limit y Extended Virtual Addressing. get-task-allow permite la conexión del depurador necesaria para el flujo de JIT con StikDebug. Estas capacidades dependen de la firma y del perfil de aprovisionamiento.",
       "iconURL": "https://raw.githubusercontent.com/stossy11/MeloCafe/247bd9e5ed05192eb4fee6162f1519b4aef0ffa1/MeloCafe/MeloCafe/Assets/Assets.xcassets/AppIcon.imageset/AppIcon.png",
       "tintColor": "#6C8C75",
       "category": "games",
       "appPermissions": {
         "entitlements": [
-          "com.apple.developer.kernel.increased-memory-limit"
+          "com.apple.developer.kernel.increased-memory-limit",
+          "com.apple.developer.kernel.extended-virtual-addressing",
+          "get-task-allow"
         ],
         "privacy": {
           "NSCameraUsageDescription": "MeloCafe uses the camera when Wii U software requests the GamePad camera.",
