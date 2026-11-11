@@ -85,9 +85,11 @@ jobs:
           if [ "$IS_BETA" = "true" ]; then ARGS+=(--is-beta); fi
           python scripts/update_manual_app.py "${ARGS[@]}"
       - name: Commit source.json
+        env:
+          BUNDLE_ID: ${{ inputs.bundle_id }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add source.json
-          git commit -m "Manually update ${{ inputs.bundle_id }}"
+          git commit -m "Manually update $BUNDLE_ID"
           git push
