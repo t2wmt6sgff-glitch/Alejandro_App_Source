@@ -1,0 +1,93 @@
+name: Add manual app update
+
+on:
+  workflow_dispatch:
+    inputs:
+      bundle_id:
+        description: Bundle ID de una app que YA existe en source.json
+        required: true
+        type: string
+      version:
+        description: Nueva versión (por ejemplo 21.11.0)
+        required: true
+        type: string
+      build_version:
+        description: Número de compilación
+        required: true
+        type: string
+      download_url:
+        description: URL HTTPS directa del IPA
+        required: true
+        type: string
+      date:
+        description: Fecha YYYY-MM-DD (vacío = hoy)
+        required: false
+        type: string
+      size:
+        description: Tamaño del IPA en bytes (opcional)
+        required: false
+        type: string
+      min_os_version:
+        description: Versión mínima de iOS/iPadOS (opcional)
+        required: false
+        type: string
+      description:
+        description: Descripción de esta versión (opcional)
+        required: false
+        type: string
+      is_beta:
+        description: Marcar como beta
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+concurrency:
+  group: manual-app-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run catalog tests
+        run: python -m unittest discover -s tests -v
+      - name: Add version to existing app
+        env:
+          BUNDLE_ID: ${{ inputs.bundle_id }}
+          APP_VERSION: ${{ inputs.version }}
+          BUILD_VERSION: ${{ inputs.build_version }}
+          DOWNLOAD_URL: ${{ inputs.download_url }}
+          APP_DATE: ${{ inputs.date }}
+          APP_SIZE: ${{ inputs.size }}
+          MIN_OS_VERSION: ${{ inputs.min_os_version }}
+          APP_DESCRIPTION: ${{ inputs.description }}
+          IS_BETA: ${{ inputs.is_beta }}
+        run: |
+          ARGS=(
+            --bundle-id "$BUNDLE_ID"
+            --version "$APP_VERSION"
+            --build-version "$BUILD_VERSION"
+            --download-url "$DOWNLOAD_URL"
+          )
+          if [ -n "$APP_DATE" ]; then ARGS+=(--date "$APP_DATE"); fi
+          if [ -n "$APP_SIZE" ]; then ARGS+=(--size "$APP_SIZE"); fi
+          if [ -n "$MIN_OS_VERSION" ]; then ARGS+=(--min-os-version "$MIN_OS_VERSION"); fi
+          if [ -n "$APP_DESCRIPTION" ]; then ARGS+=(--description "$APP_DESCRIPTION"); fi
+          if [ "$IS_BETA" = "true" ]; then ARGS+=(--is-beta); fi
+          python scripts/update_manual_app.py "${ARGS[@]}"
+      - name: Commit source.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add source.json
+          git commit -m "Manually update ${{ inputs.bundle_id }}"
+          git push
