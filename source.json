@@ -123,6 +123,14 @@
       },
       "versions": [
         {
+          "version": "0.4.5",
+          "buildVersion": "405",
+          "date": "2026-11-14",
+          "downloadURL": "https://github.com/bryanthaboi/gen1recomp/releases/download/v0.4.5/gen1recomp%2B%2B-0.4.5-ios.ipa",
+          "size": 44742127,
+          "minOSVersion": "15.0"
+        },
+        {
           "version": "0.4.4",
           "buildVersion": "404",
           "date": "2026-11-12",
